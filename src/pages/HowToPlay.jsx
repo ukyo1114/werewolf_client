@@ -245,25 +245,6 @@ const HowToPlay = () => {
         position="relative"
         px={{ base: 4, md: 6 }}
       >
-        <Link
-          as={RouterLink}
-          to="/"
-          position="absolute"
-          left={{ base: 4, md: -4 }}
-          top={{ base: -8, md: -4 }}
-          display="flex"
-          alignItems="center"
-          color="blue.500"
-          _hover={{ textDecoration: "none", color: "blue.600" }}
-          transition="all 0.2s"
-          zIndex={1}
-          fontSize={{ base: "sm", md: "md" }}
-        >
-          <Icon as={FaHome} mr={2} />
-          <Text display={{ base: "none", sm: "inline" }}>
-            トップページへ戻る
-          </Text>
-        </Link>
         <VStack spacing={10} align="stretch">
           <Box textAlign="center" mb={8} px={{ base: 4, md: 0 }}>
             <Heading
@@ -404,35 +385,117 @@ const HowToPlay = () => {
             border="1px"
             borderColor={borderColor}
           >
-            <Heading size="md" mb={4} color={headingColor}>
+            <Heading size="md" mb={6} color={headingColor}>
               基本的な役職
             </Heading>
-            <VStack align="start" spacing={4}>
-              <Text>
-                <Text as="span" fontWeight="bold" color="blue.500">
-                  村人：
-                </Text>
-                人狼を見つけ出し、処刑するのが目的です。
-              </Text>
-              <Text>
-                <Text as="span" fontWeight="bold" color="red.500">
-                  人狼：
-                </Text>
-                夜の間に村人を襲撃し、村人陣営の人数を減らすのが目的です。
-              </Text>
-              <Text>
-                <Text as="span" fontWeight="bold" color="purple.500">
-                  占い師：
-                </Text>
-                夜の間に1人を選んで、その人が人狼かどうかを占うことができます。
-              </Text>
-              <Text>
-                <Text as="span" fontWeight="bold" color="green.500">
-                  霊能者：
-                </Text>
-                処刑された人が人狼だったかどうかを知ることができます。
-              </Text>
+            <VStack align="start" spacing={6}>
+              <Box>
+                <Heading size="sm" mb={3} color="blue.500">
+                  村人陣営
+                </Heading>
+                <VStack align="start" spacing={3}>
+                  <Text>
+                    <Text as="span" fontWeight="bold" color="blue.500">
+                      村人：
+                    </Text>
+                    人狼を見つけ出し、処刑するのが目的です。
+                  </Text>
+                  <Text>
+                    <Text as="span" fontWeight="bold" color="purple.500">
+                      占い師：
+                    </Text>
+                    夜の間に1人を選んで、その人が人狼かどうかを占うことができます。
+                  </Text>
+                  <Text>
+                    <Text as="span" fontWeight="bold" color="green.500">
+                      霊能者：
+                    </Text>
+                    処刑された人が人狼だったかどうかを知ることができます。
+                  </Text>
+                  <Text>
+                    <Text as="span" fontWeight="bold" color="teal.500">
+                      狩人：
+                    </Text>
+                    夜の間に1人を選んで、その人を人狼の襲撃から守ることができます。
+                  </Text>
+                </VStack>
+              </Box>
+
+              <Box>
+                <Heading size="sm" mb={3} color="red.500">
+                  人狼陣営
+                </Heading>
+                <VStack align="start" spacing={3}>
+                  <Text>
+                    <Text as="span" fontWeight="bold" color="red.500">
+                      人狼：
+                    </Text>
+                    夜の間に村人を襲撃し、村人陣営の人数を減らすのが目的です。
+                  </Text>
+                  <Text>
+                    <Text as="span" fontWeight="bold" color="orange.500">
+                      狂人：
+                    </Text>
+                    村人陣営に属しますが、人狼の勝利を手助けするのが目的です。占い師や霊能者からは村人として判定されます。
+                  </Text>
+                </VStack>
+              </Box>
             </VStack>
+
+            <Box
+              mt={8}
+              p={4}
+              bg={useColorModeValue("gray.50", "gray.700")}
+              rounded="md"
+            >
+              <Text fontSize="sm" color={textColor} mb={2}>
+                ※ その他にも以下の役職が実装されています：
+              </Text>
+              <VStack align="start" spacing={1} fontSize="sm" color={textColor}>
+                <Text>
+                  <Text as="span" fontWeight="bold" color="cyan.600">
+                    共有者：
+                  </Text>
+                  村人陣営の役職で、他の共有者が誰かを知ることができ、夜には共有者同士で秘密会話ができます。
+                </Text>
+                <Text>
+                  <Text as="span" fontWeight="bold" color="pink.500">
+                    妖狐：
+                  </Text>
+                  第三陣営。人狼に襲撃されても死なず、最後まで生き残ることが目的です。
+                </Text>
+                <Text>
+                  <Text as="span" fontWeight="bold" color="yellow.600">
+                    狂信者：
+                  </Text>
+                  人狼陣営の役職で、人狼が誰かを知ることができますが、占い師からは村人と判定されます。
+                </Text>
+                <Text>
+                  <Text as="span" fontWeight="bold" color="gray.600">
+                    背徳者：
+                  </Text>
+                  妖狐陣営の役職で、妖狐の勝利をサポートします。霊能者からは村人と判定されます。
+                </Text>
+              </VStack>
+            </Box>
+          </Box>
+
+          <Box mt={8} textAlign="center">
+            <Link
+              as={RouterLink}
+              to="/"
+              display="inline-flex"
+              alignItems="center"
+              color="blue.500"
+              _hover={{ textDecoration: "none", color: "blue.600" }}
+              transition="all 0.2s"
+              fontSize={{ base: "sm", md: "md" }}
+            >
+              <Icon as={FaHome} mr={2} />
+              <Text display={{ base: "none", sm: "inline" }}>
+                トップページへ戻る
+              </Text>
+            </Link>
           </Box>
         </VStack>
       </Container>
