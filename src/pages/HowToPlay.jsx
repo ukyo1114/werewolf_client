@@ -38,6 +38,9 @@ const HowToPlay = () => {
   const bgColor = useColorModeValue("gray.50", "gray.900");
   const textColor = useColorModeValue("gray.600", "gray.400");
   const cardBg = useColorModeValue("white", "gray.800");
+  const borderColor = useColorModeValue("gray.200", "gray.700");
+  const iconBg = useColorModeValue("blue.50", "blue.900");
+  const headingColor = useColorModeValue("gray.700", "white");
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [isOpen3, setIsOpen3] = useState(false);
@@ -237,28 +240,52 @@ const HowToPlay = () => {
 
   return (
     <Box bg={bgColor} minH="100vh" py={10}>
-      <Container maxW="container.xl">
+      <Container
+        maxW="container.xl"
+        position="relative"
+        px={{ base: 4, md: 6 }}
+      >
+        <Link
+          as={RouterLink}
+          to="/"
+          position="absolute"
+          left={{ base: 4, md: -4 }}
+          top={{ base: -8, md: -4 }}
+          display="flex"
+          alignItems="center"
+          color="blue.500"
+          _hover={{ textDecoration: "none", color: "blue.600" }}
+          transition="all 0.2s"
+          zIndex={1}
+          fontSize={{ base: "sm", md: "md" }}
+        >
+          <Icon as={FaHome} mr={2} />
+          <Text display={{ base: "none", sm: "inline" }}>
+            トップページへ戻る
+          </Text>
+        </Link>
         <VStack spacing={10} align="stretch">
-          <Box textAlign="center" mb={8} position="relative">
-            <Link
-              as={RouterLink}
-              to="/"
-              position="absolute"
-              left={0}
-              top="50%"
-              transform="translateY(-50%)"
-              display="flex"
-              alignItems="center"
-              color="blue.500"
-              _hover={{ textDecoration: "none", color: "blue.600" }}
+          <Box textAlign="center" mb={8} px={{ base: 4, md: 0 }}>
+            <Heading
+              as="h1"
+              size={{ base: "xl", md: "2xl" }}
+              mb={4}
+              bgGradient="linear(to-r, blue.400, blue.600)"
+              bgClip="text"
+              wordBreak="keep-all"
+              overflowWrap="break-word"
             >
-              <Icon as={FaHome} mr={2} />
-              トップページへ戻る
-            </Link>
-            <Heading as="h1" size="2xl" mb={4}>
               人狼ゲームのはじめかた
             </Heading>
-            <Text fontSize="xl" color={textColor}>
+            <Text
+              fontSize={{ base: "lg", md: "xl" }}
+              color={textColor}
+              maxW="2xl"
+              mx="auto"
+              px={{ base: 2, md: 0 }}
+              wordBreak="keep-all"
+              overflowWrap="break-word"
+            >
               初めての方でも簡単に楽しめる人狼ゲームの遊び方をご紹介します
             </Text>
           </Box>
@@ -271,8 +298,10 @@ const HowToPlay = () => {
                 bg={cardBg}
                 rounded="xl"
                 shadow="md"
-                _hover={{ shadow: "lg" }}
+                _hover={{ shadow: "lg", transform: "translateY(-2px)" }}
                 transition="all 0.3s"
+                border="1px"
+                borderColor={borderColor}
               >
                 <Button
                   variant="ghost"
@@ -288,9 +317,13 @@ const HowToPlay = () => {
                 >
                   <HStack spacing={4} w="100%" justify="space-between">
                     <HStack spacing={4}>
-                      <Icon as={step.icon} w={8} h={8} color="blue.500" />
+                      <Box p={3} rounded="lg" bg={iconBg} color="blue.500">
+                        <Icon as={step.icon} w={6} h={6} />
+                      </Box>
                       <VStack align="start" spacing={2}>
-                        <Heading size="md">{step.title}</Heading>
+                        <Heading size="md" color={headingColor}>
+                          {step.title}
+                        </Heading>
                         <Text color={textColor}>{step.description}</Text>
                       </VStack>
                     </HStack>
@@ -310,54 +343,91 @@ const HowToPlay = () => {
                                 : FaChevronDown
                         }
                         color="blue.500"
+                        transition="transform 0.2s"
+                        transform={
+                          (index === 0 && isOpen) ||
+                          (index === 1 && isOpen2) ||
+                          (index === 2 && isOpen3)
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)"
+                        }
                       />
                     )}
                   </HStack>
                 </Button>
                 {index === 0 && (
                   <Collapse in={isOpen} animateOpacity>
-                    {step.content}
+                    <Box
+                      pt={6}
+                      mt={6}
+                      borderTop="1px"
+                      borderColor={borderColor}
+                    >
+                      {step.content}
+                    </Box>
                   </Collapse>
                 )}
                 {index === 1 && (
                   <Collapse in={isOpen2} animateOpacity>
-                    {step.content}
+                    <Box
+                      pt={6}
+                      mt={6}
+                      borderTop="1px"
+                      borderColor={borderColor}
+                    >
+                      {step.content}
+                    </Box>
                   </Collapse>
                 )}
                 {index === 2 && (
                   <Collapse in={isOpen3} animateOpacity>
-                    {step.content}
+                    <Box
+                      pt={6}
+                      mt={6}
+                      borderTop="1px"
+                      borderColor={borderColor}
+                    >
+                      {step.content}
+                    </Box>
                   </Collapse>
                 )}
               </Box>
             ))}
           </VStack>
 
-          <Box mt={8} p={6} bg={cardBg} rounded="xl" shadow="md">
-            <Heading size="md" mb={4}>
+          <Box
+            mt={8}
+            p={6}
+            bg={cardBg}
+            rounded="xl"
+            shadow="md"
+            border="1px"
+            borderColor={borderColor}
+          >
+            <Heading size="md" mb={4} color={headingColor}>
               基本的な役職
             </Heading>
             <VStack align="start" spacing={4}>
               <Text>
-                <Text as="span" fontWeight="bold">
+                <Text as="span" fontWeight="bold" color="blue.500">
                   村人：
                 </Text>
                 人狼を見つけ出し、処刑するのが目的です。
               </Text>
               <Text>
-                <Text as="span" fontWeight="bold">
+                <Text as="span" fontWeight="bold" color="red.500">
                   人狼：
                 </Text>
                 夜の間に村人を襲撃し、村人陣営の人数を減らすのが目的です。
               </Text>
               <Text>
-                <Text as="span" fontWeight="bold">
+                <Text as="span" fontWeight="bold" color="purple.500">
                   占い師：
                 </Text>
                 夜の間に1人を選んで、その人が人狼かどうかを占うことができます。
               </Text>
               <Text>
-                <Text as="span" fontWeight="bold">
+                <Text as="span" fontWeight="bold" color="green.500">
                   霊能者：
                 </Text>
                 処刑された人が人狼だったかどうかを知ることができます。
