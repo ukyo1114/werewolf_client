@@ -8,6 +8,9 @@ import HowToPlay from "./pages/HowToPlay.jsx";
 const Channels = lazy(() => import("./pages/Channels.jsx"));
 const EmailVerification = lazy(() => import("./pages/EmailVerification.jsx"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword.jsx"));
+const EmailVerificationRequest = lazy(
+  () => import("./pages/EmailVerificationRequest.jsx")
+);
 
 function App() {
   return (
@@ -18,6 +21,7 @@ function App() {
         <Route path="/chats" element={<Channels />} />
         <Route path="/verification/:token" element={<EmailVerification />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/register" element={<EmailVerificationRequest />} />
       </Routes>
     </Suspense>
   );

@@ -2,14 +2,18 @@ import { createContext, useReducer, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
 
 import { userReducer, initialUserState } from "../reducers/userReducer";
-import { channelReducer, initialChannelState } from "../reducers/channelReducer";
+import {
+  channelReducer,
+  initialChannelState,
+} from "../reducers/channelReducer";
 
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [user, uDispatch] = useReducer(userReducer, initialUserState);
   const [currentChannel, chDispatch] = useReducer(
-    channelReducer, initialChannelState
+    channelReducer,
+    initialChannelState
   );
   const isMobile = useMediaQuery({ maxWidth: 767 });
 

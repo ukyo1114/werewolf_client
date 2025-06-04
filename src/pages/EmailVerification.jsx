@@ -2,7 +2,14 @@ import { useCallback } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-import { Container, Stack, Text, UnorderedList, ListItem, Button } from "@chakra-ui/react";
+import {
+  Container,
+  Stack,
+  Text,
+  UnorderedList,
+  ListItem,
+  Button,
+} from "@chakra-ui/react";
 
 import useNotification from "../hooks/useNotification";
 
@@ -17,17 +24,14 @@ const EmailVerification = () => {
       await axios.post("/api/verify/resend", { token }, config);
       showToast("確認メールを再送信しました", "success");
     } catch (error) {
-      const errorMessage = error.response?.data?.error || "再送信に失敗しました"
+      const errorMessage =
+        error.response?.data?.error || "再送信に失敗しました";
       showToast(errorMessage, "error");
     }
   }, [token, showToast]);
 
   return (
-    <Container
-      display="flex"
-      centerContent
-      maxW="xl"
-    >
+    <Container display="flex" centerContent maxW="xl">
       <Stack w="100%" p={4}>
         <Text as="h1" fontSize="2xl" fontWeight="bold" color="gray.700">
           メールアドレスの確認が必要です
@@ -41,12 +45,7 @@ const EmailVerification = () => {
           <ListItem>入力したメールアドレスが正しいかご確認ください。</ListItem>
           <ListItem>届かない場合は再送信をお試しください。</ListItem>
         </UnorderedList>
-        <Button
-          w="11rem"
-          colorScheme="teal"
-          mt={4}
-          onClick={handleResend}
-        >
+        <Button w="11rem" colorScheme="teal" mt={4} onClick={handleResend}>
           確認メールを再送信
         </Button>
       </Stack>
