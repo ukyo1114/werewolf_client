@@ -1,20 +1,18 @@
-import { Skeleton, Stack } from "@chakra-ui/react";
+import { Skeleton, VStack } from "@chakra-ui/react";
 
 const ChatLoading = () => {
   return (
-    <Stack>
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-    </Stack>
+    <VStack spacing={4} align="stretch" p={4} w="100%">
+      {[...Array(6)].map((_, index) => (
+        <Skeleton
+          key={index}
+          height="45px"
+          width="100%"
+          borderRadius="md"
+          speed={1.5}
+        />
+      ))}
+    </VStack>
   );
 };
 

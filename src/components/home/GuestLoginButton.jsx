@@ -14,9 +14,9 @@ const GuestLoginButton = () => {
   const handleGuestLogin = async () => {
     try {
       setIsLoading(true);
-      const { data } = await axios.get("/api/users/guest");
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      uDispatch({ type: "LOGIN", payload: data });
+      const response = await axios.get("/api/user/guest");
+      localStorage.setItem("userInfo", JSON.stringify(response.data));
+      uDispatch({ type: "LOGIN", payload: response.data });
       navigate("/chats");
     } catch (error) {
       toast({
