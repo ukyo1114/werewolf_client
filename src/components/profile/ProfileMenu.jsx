@@ -1,7 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
 import {
-  Menu, MenuButton, MenuList, MenuItem, MenuDivider,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
   Box,
   Center,
   Avatar,
@@ -49,16 +53,17 @@ const ProfileMenu = () => {
             w="100%"
             minW="0"
           >
-            <EllipsisText pr={1} fontSize="sm">{user.name}</EllipsisText>
-            <Box color="gray.700"><FaEllipsisH /></Box>
+            <EllipsisText pr={1} fontSize="sm">
+              {user.userName}
+            </EllipsisText>
+            <Box color="gray.700">
+              <FaEllipsisH />
+            </Box>
           </Box>
         </Center>
       </MenuButton>
       <MenuList boxShadow="uniform">
-        <MenuItem
-          _hover={{ bg: "gray.200" }}
-          onClick={pModal.onOpen}
-        >
+        <MenuItem _hover={{ bg: "gray.200" }} onClick={pModal.onOpen}>
           プロフィール
         </MenuItem>
 
@@ -72,10 +77,7 @@ const ProfileMenu = () => {
 
         <MenuDivider borderColor="gray.700" />
 
-        <MenuItem
-          _hover={{ bg: "gray.200" }}
-          onClick={psModal.onOpen}
-        >
+        <MenuItem _hover={{ bg: "gray.200" }} onClick={psModal.onOpen}>
           プロフィール設定
         </MenuItem>
 
@@ -89,10 +91,7 @@ const ProfileMenu = () => {
 
         <MenuDivider borderColor="gray.700" />
 
-        <MenuItem
-          _hover={{ bg: "gray.200" }}
-          onClick={usModal.onOpen}
-        >
+        <MenuItem _hover={{ bg: "gray.200" }} onClick={usModal.onOpen}>
           Eメール・パスワード設定
         </MenuItem>
 
@@ -106,10 +105,7 @@ const ProfileMenu = () => {
 
         <MenuDivider borderColor="gray.700" />
 
-        <MenuItem
-          _hover={{ bg: "gray.200" }}
-          onClick={logoutHandler}
-        >
+        <MenuItem _hover={{ bg: "gray.200" }} onClick={logoutHandler}>
           ログアウト
         </MenuItem>
       </MenuList>

@@ -253,7 +253,7 @@ const EmailVerificationRequest = () => {
     }
     try {
       setIsLoading(true);
-      await axios.post("/api/users/verify-email", { email });
+      await axios.post("/api/verify-email/register-user", { email });
       setSubmittedEmail(email);
       setIsSuccess(true);
     } catch (error) {

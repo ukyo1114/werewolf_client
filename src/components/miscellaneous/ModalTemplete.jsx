@@ -5,7 +5,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
-  Box,
 } from "@chakra-ui/react";
 import { EllipsisText } from "./CustomComponents";
 

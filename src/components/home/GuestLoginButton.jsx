@@ -3,10 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button, Icon, Text, useToast } from "@chakra-ui/react";
 import { FaUser } from "react-icons/fa";
-import { useUserState } from "../../context/UserProvider.jsx";
 
 const GuestLoginButton = () => {
-  const { uDispatch } = useUserState();
   const navigate = useNavigate();
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -14,9 +12,16 @@ const GuestLoginButton = () => {
   const handleGuestLogin = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get("/api/user/guest");
-      localStorage.setItem("userInfo", JSON.stringify(response.data));
-      uDispatch({ type: "LOGIN", payload: response.data });
+      const { data } = await axios.get("/api/user/guest");
+      localStorage.setItem(
+        "userInfo",
+        JSON.stringify({
+          ...data,
+          userName: "ゲスト",
+          pic: null,
+          isGuest: true,
+        })
+      );
       navigate("/chats");
     } catch (error) {
       toast({

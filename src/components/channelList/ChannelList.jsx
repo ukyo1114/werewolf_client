@@ -9,6 +9,7 @@ import {
   Avatar,
   Stack,
   useDisclosure,
+  Text,
 } from "@chakra-ui/react";
 
 import { FaEllipsisH } from "react-icons/fa";
@@ -24,6 +25,8 @@ const ChannelList = ({ showJoinedCh }) => {
   const { user, isMobile } = useUserState();
   const [selectedChannel, setSelectedChannel] = useState(null);
   const [channelList, setChannelList] = useState([]);
+  const [joinedChannels, setJoinedChannels] = useState([]);
+  const [blockedChannels, setBlockedChannels] = useState([]);
   const channelInfo = useDisclosure();
   const showToast = useNotification();
 
@@ -32,15 +35,25 @@ const ChannelList = ({ showJoinedCh }) => {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
 
       const {
-        data: { channelList },
+        data: { channelList, joinedChannels, blockedChannels },
       } = await axios.get("/api/channel/list", config);
-      channelList.sort((a, b) => b.users.length - a.users.length);
+
+      if (!Array.isArray(channelList)) {
+        throw new Error("Invalid channel list response");
+      }
+
       setChannelList(channelList);
+      setJoinedChannels(joinedChannels || []);
+      setBlockedChannels(blockedChannels || []);
     } catch (error) {
       showToast(
         error?.response?.data?.error || errors.FETCH_CHANNEL_LIST,
         "error"
       );
+      // エラー時は空の配列をセット
+      setChannelList([]);
+      setJoinedChannels([]);
+      setBlockedChannels([]);
     }
   }, [user.token, showToast]);
 
@@ -49,11 +62,13 @@ const ChannelList = ({ showJoinedCh }) => {
   }, [fetchChannelList]);
 
   const filteredChannelList = showJoinedCh
-    ? channelList.filter((channel) => channel.users.some((u) => u === user._id))
-    : channelList;
+    ? channelList.filter((channel) => joinedChannels.includes(channel._id))
+    : channelList.filter((channel) => !blockedChannels.includes(channel._id));
 
   const handleChannelSelect = (channel) => {
-    setSelectedChannel(channel);
+    const isBlocked = blockedChannels.includes(channel._id);
+    const isJoined = joinedChannels.includes(channel._id);
+    setSelectedChannel({ ...channel, isBlocked, isJoined });
     channelInfo.onOpen();
   };
 
@@ -62,18 +77,21 @@ const ChannelList = ({ showJoinedCh }) => {
       {filteredChannelList.map((channel) => {
         if (!channel.channelAdmin) return null;
 
+        const isJoined = joinedChannels.includes(channel._id);
+        const isBlocked = blockedChannels.includes(channel._id);
+
         return (
           <Box
-            data-key={channel._id} // テスト用
+            data-key={channel._id}
             onClick={() => handleChannelSelect(channel)}
             cursor="pointer"
-            bg={channel.users.includes(user._id) ? "green.100" : "white"}
+            bg={isJoined ? "green.100" : "white"}
             p={2}
             w="100%"
             borderRadius="lg"
             key={channel._id}
             _hover={{
-              bg: channel.users.includes(user._id) ? "green.200" : "gray.200",
+              bg: isJoined ? "green.200" : "gray.200",
             }}
             boxShadow="uniform"
           >
@@ -89,9 +107,17 @@ const ChannelList = ({ showJoinedCh }) => {
                   タイトル： {channel.channelName}
                 </EllipsisText>
                 <Divider borderWidth={1} borderColor="gray.700" mb={1} />
-                <EllipsisText>
-                  作成者： {channel.channelAdmin.name}
+                <EllipsisText mb={1}>
+                  作成者： {channel.channelAdmin.userName}
                 </EllipsisText>
+                <Flex gap={2} fontSize="sm" color="gray.600">
+                  <Text>プレイヤー数: {channel.numberOfPlayers}人</Text>
+                  {channel.passwordEnabled && <Text>🔒</Text>}
+                  {channel.denyGuests && <Text>👤</Text>}
+                  {(isBlocked || (user.isGuest && channel.denyGuests)) && (
+                    <Text>🚫</Text>
+                  )}
+                </Flex>
               </Box>
 
               <Box color="gray.700">

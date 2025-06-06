@@ -7,6 +7,8 @@ import {
   Input,
   Flex,
   Text,
+  Box,
+  Badge,
 } from "@chakra-ui/react";
 
 import { useUserState } from "../../context/UserProvider.jsx";
@@ -19,52 +21,83 @@ const ChannelInfo = ({ selectedChannel }) => {
   const [password, setPassword] = useState("");
   const joinChannel = useJoinChannel();
 
+  const { isBlocked, isJoined } = selectedChannel;
+
   return (
-    <Stack overflow="hidden">
-      <Text textAlign="center">
-        タイトル： {selectedChannel.channelName}
-      </Text>
+    <Stack spacing={4} overflow="hidden">
+      <Box>
+        <Text fontSize="xl" fontWeight="bold" textAlign="center" mb={2}>
+          {selectedChannel.channelName}
+        </Text>
+        <Flex gap={2} justifyContent="center" mb={2}>
+          {selectedChannel.passwordEnabled && (
+            <Badge colorScheme="blue" fontSize="sm">
+              🔒 パスワード保護
+            </Badge>
+          )}
+          {selectedChannel.denyGuests && (
+            <Badge colorScheme="purple" fontSize="sm">
+              👤 登録済みユーザーのみ
+            </Badge>
+          )}
+        </Flex>
+      </Box>
 
       <Divider borderWidth={1} borderColor="gray.700" />
 
-      <Text overflow="auto" whiteSpace="pre-wrap">
-        {selectedChannel.description}
-      </Text>
+      <Box>
+        <Text fontWeight="bold" mb={2}>
+          説明
+        </Text>
+        <Text
+          overflow="auto"
+          whiteSpace="pre-wrap"
+          bg="gray.50"
+          p={3}
+          borderRadius="md"
+        >
+          {selectedChannel.channelDescription}
+        </Text>
+      </Box>
 
-      <Flex justifyContent="space-between">
-        <EllipsisText fontSize="sm" color="red.500">
-          作成者： {selectedChannel.channelAdmin.name}
-        </EllipsisText>
-        <EllipsisText fontSize="sm" color="red.500">
-          参加者数： {selectedChannel.users.length}人
-        </EllipsisText>
+      <Flex justifyContent="space-between" alignItems="center">
+        <Box>
+          <Text fontWeight="bold" mb={1}>
+            作成者
+          </Text>
+          <Text color="gray.600">{selectedChannel.channelAdmin.userName}</Text>
+        </Box>
+        <Box textAlign="right">
+          <Text fontWeight="bold" mb={1}>
+            プレイヤー数
+          </Text>
+          <Text color="gray.600">{selectedChannel.numberOfPlayers}人</Text>
+        </Box>
       </Flex>
 
-      {selectedChannel.hasPassword &&
-        !selectedChannel.users.some((u) => u === user._id) && (
-          <FormControl id="password">
-            <Input
-              placeholder="パスワード"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </FormControl>
+      {selectedChannel.passwordEnabled && !isJoined && (
+        <FormControl id="password">
+          <Input
+            placeholder="パスワードを入力してください"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            size="lg"
+          />
+        </FormControl>
       )}
 
       <ModalButton
         data-testid="enter-button"
-        colorScheme={
-          selectedChannel.blockUsers.some((u) => u === user._id) ?
-          "pink" : "teal"
-        }
+        colorScheme={isBlocked ? "pink" : "teal"}
         onClick={() => joinChannel(selectedChannel._id, password)}
-        isDisabled={selectedChannel.blockUsers.some(
-          (u) => u === user._id,
-        )}
+        isDisabled={isBlocked || (user.isGuest && selectedChannel.denyGuests)}
+        size="lg"
       >
-        {selectedChannel.blockUsers.some((u) => u === user._id)
+        {isBlocked
           ? "ブロックされています"
-          : "入室"}
+          : user.isGuest && selectedChannel.denyGuests
+            ? "ゲストは入室できません"
+            : "入室"}
       </ModalButton>
     </Stack>
   );

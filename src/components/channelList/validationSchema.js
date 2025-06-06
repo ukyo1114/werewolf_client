@@ -24,6 +24,13 @@ export const createChValidationSchema = Yup.object({
         .required("パスワードは必須です"),
     otherwise: (schema) => schema.notRequired(),
   }),
+
+  denyGuests: Yup.boolean(),
+
+  numberOfPlayers: Yup.number()
+    .min(5, "プレイヤー数は5人以上である必要があります")
+    .max(20, "プレイヤー数は20人以下である必要があります")
+    .required("プレイヤー数は必須です"),
 });
 
 export const createChInitialValues = {
@@ -31,4 +38,6 @@ export const createChInitialValues = {
   description: "",
   password: "",
   isPasswordEnabled: false,
+  denyGuests: false,
+  numberOfPlayers: 10,
 };

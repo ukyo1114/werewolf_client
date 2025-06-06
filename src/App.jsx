@@ -6,13 +6,14 @@ import Home from "./pages/Home.jsx";
 import HowToPlay from "./pages/HowToPlay.jsx";
 import Login from "./pages/Login.jsx";
 import RequestPasswordReset from "./pages/RequestPasswordReset.jsx";
+import Register from "./pages/Register.jsx";
 
 const Channels = lazy(() => import("./pages/Channels.jsx"));
 const EmailVerification = lazy(() => import("./pages/EmailVerification.jsx"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword.jsx"));
-const EmailVerificationRequest = lazy(
-  () => import("./pages/EmailVerificationRequest.jsx")
-);
+// const EmailVerificationRequest = lazy(
+//   () => import("./pages/EmailVerificationRequest.jsx")
+// );
 
 function App() {
   return (
@@ -23,12 +24,13 @@ function App() {
         <Route path="/chats" element={<Channels />} />
         <Route path="/verification/:token" element={<EmailVerification />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/register" element={<EmailVerificationRequest />} />
+        {/* <Route path="/register" element={<EmailVerificationRequest />} /> */}
         <Route path="/login" element={<Login />} />
         <Route
           path="/request-password-reset"
           element={<RequestPasswordReset />}
         />
+        <Route path="/register/:token" element={<Register />} />
       </Routes>
     </Suspense>
   );

@@ -1,11 +1,12 @@
 const initialUserState = {
   _id: "",
-  name: "",
+  userName: "",
   pic: "",
   token: "",
   status: "",
   role: "",
   partnerId: "",
+  isGuest: false,
 };
 
 function userReducer(state = initialUserState, action) {
