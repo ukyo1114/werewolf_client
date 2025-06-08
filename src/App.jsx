@@ -5,8 +5,8 @@ import { Suspense, lazy } from "react";
 import Home from "./pages/Home/Home.jsx";
 import HowToPlay from "./pages/HowToPlay.jsx";
 import Login from "./pages/Login/Login.jsx";
-import RequestPasswordReset from "./pages/RequestPasswordReset.jsx";
 import Register from "./pages/Register.jsx";
+import RequestPasswordReconfigure from "./pages/PasswordReconfigure/PasswordReconfigure.jsx";
 
 const Channels = lazy(() => import("./pages/Channels.jsx"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword.jsx"));
@@ -28,8 +28,8 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route
-          path="/request-password-reset"
-          element={<RequestPasswordReset />}
+          path="/request-password-reconfigure"
+          element={<RequestPasswordReconfigure />}
         />
         <Route path="/register/:token" element={<Register />} />
       </Routes>
