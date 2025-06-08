@@ -17,8 +17,8 @@ import {
 } from "@chakra-ui/react";
 import { FaSignInAlt, FaUserPlus, FaGamepad } from "react-icons/fa";
 import { FaUsers, FaLock, FaXTwitter } from "react-icons/fa6";
-import { useUserState } from "../context/UserProvider.jsx";
-import GuestLoginButton from "../components/home/GuestLoginButton.jsx";
+import { useUserState } from "../../context/UserProvider.jsx";
+import GuestLoginButton from "./GuestLoginButton.jsx";
 
 const Home = () => {
   const { uDispatch, chDispatch } = useUserState();
@@ -145,7 +145,7 @@ const Home = () => {
 
               <Button
                 as={Link}
-                to="/register"
+                to="/send-registration-email"
                 colorScheme="blue"
                 variant="solid"
                 size="lg"
