@@ -4,15 +4,14 @@ import { Suspense, lazy } from "react";
 
 import Home from "./pages/Home/Home.jsx";
 import HowToPlay from "./pages/HowToPlay.jsx";
-import Login from "./pages/Login.jsx";
+import Login from "./pages/Login/Login.jsx";
 import RequestPasswordReset from "./pages/RequestPasswordReset.jsx";
 import Register from "./pages/Register.jsx";
 
 const Channels = lazy(() => import("./pages/Channels.jsx"));
-const EmailVerification = lazy(() => import("./pages/EmailVerification.jsx"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword.jsx"));
 const SendRegistrationEmail = lazy(
-  () => import("./pages/sendRegistrationEmail/SendRegistrationEmail.jsx")
+  () => import("./pages/SendRegistrationEmail/SendRegistrationEmail.jsx")
 );
 
 function App() {
@@ -22,7 +21,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/how-to-play" element={<HowToPlay />} />
         <Route path="/chats" element={<Channels />} />
-        <Route path="/verification/:token" element={<EmailVerification />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route
           path="/send-registration-email"

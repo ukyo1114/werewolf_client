@@ -11,7 +11,6 @@ import {
   FormLabel,
   Input,
   Button,
-  useToast,
   useColorModeValue,
   HStack,
   Divider,
@@ -19,14 +18,15 @@ import {
   InputLeftElement,
 } from "@chakra-ui/react";
 import { FaUser, FaLock, FaUserFriends, FaSignInAlt } from "react-icons/fa";
-import { useUserState } from "../context/UserProvider";
+import { useUserState } from "../../context/UserProvider";
+import useNotification from "../../commonHooks/useNotification";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const toast = useToast();
+  const showToast = useNotification();
   const { uDispatch, chDispatch } = useUserState();
   const textColor = useColorModeValue("gray.600", "gray.400");
   const cardBg = useColorModeValue("white", "gray.800");
@@ -51,18 +51,12 @@ const Login = () => {
         password,
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
-      uDispatch({ type: "LOGIN", payload: data });
       navigate("/chats");
     } catch (error) {
-      toast({
-        title: "ログインに失敗しました",
-        description:
-          error.response?.data?.message ||
-          "メールアドレスまたはパスワードが正しくありません。",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+      showToast(
+        error.response?.data?.message || "ログインに失敗しました",
+        "error"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -71,18 +65,23 @@ const Login = () => {
   const handleGuestLogin = async () => {
     try {
       setIsLoading(true);
-      const { data } = await axios.post("/api/users/guest-login");
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      uDispatch({ type: "LOGIN", payload: data });
+      const { data } = await axios.get("/api/user/guest");
+      localStorage.setItem(
+        "userInfo",
+        JSON.stringify({
+          ...data,
+          userName: "ゲスト",
+          pic: null,
+          isGuest: true,
+        })
+      );
       navigate("/chats");
     } catch (error) {
-      toast({
-        title: "ゲストログインに失敗しました",
-        description: "しばらく経ってから再度お試しください。",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+      showToast(
+        error.response?.data?.message ||
+          "ログインに失敗しました。もう一度お試しください。",
+        "error"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -215,7 +214,7 @@ const Login = () => {
               </Text>
               <Link
                 as={Link}
-                to="/register"
+                to="/send-registration-email"
                 color="blue.500"
                 fontWeight="medium"
                 _hover={{ textDecoration: "underline" }}
