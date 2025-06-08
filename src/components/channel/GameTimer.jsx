@@ -25,12 +25,14 @@ const GameTimer = () => {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
 
       const { data } = await axios.get(
-        `/api/game/player-state/${channelId}`, config
+        `/api/game/player-state/${channelId}`,
+        config
       );
       uDispatch({ type: "JOIN_GAME", payload: data });
     } catch (error) {
       showToast(
-        error?.response?.data?.error || errors.PLAYER_LOAD_FAILED, "error"
+        error?.response?.data?.error || errors.PLAYER_LOAD_FAILED,
+        "error"
       );
     }
   }, [showToast, user.token, channelId, uDispatch]);
@@ -42,7 +44,7 @@ const GameTimer = () => {
 
   useEffect(() => {
     if (isGame) fetchUserState();
-    
+
     return () => uDispatch({ type: "LEAVE_GAME" });
   }, [isGame, fetchUserState, uDispatch]);
 
@@ -50,42 +52,38 @@ const GameTimer = () => {
     if (gameSocketRef.current || !isGame) return;
 
     const auth = { auth: { token: user.token } };
-    gameSocketRef.current = io(
-      `${import.meta.env.VITE_SERVER_URL}/game`,
-      auth,
-    );
+    gameSocketRef.current = io(`${import.meta.env.VITE_SERVER_URL}/game`, auth);
 
     gameSocketRef.current.on("connect", async () => {
       try {
         const { gameState } = await gameSocketRef.current.emitWithAck(
-          "joinGame", channelId
+          "joinGame",
+          channelId
         );
 
         if (!gameState) {
           showToast(errors.GAME_NOT_FOUND, "error");
           await joinChannel(channel._id);
         }
-        
+
         chDispatch({ type: "UPDATE_GAME_STATE", payload: gameState });
         uDispatch({ type: "UPDATE_STATUS", payload: gameState });
       } catch (error) {
         showToast(
-          error?.response?.data?.message || errors.CONNECTION_FAILED, "error"
+          error?.response?.data?.message || errors.CONNECTION_FAILED,
+          "error"
         );
         gameSocketRef.current.disconnect();
       }
     });
 
-    gameSocketRef.current.on(
-      "updateGameState",
-      (gameState) => {
-        chDispatch({ type: "UPDATE_GAME_STATE", payload: gameState });
-        uDispatch({ type: "UPDATE_STATUS", payload: gameState });
-      }
-    );
+    gameSocketRef.current.on("updateGameState", (gameState) => {
+      chDispatch({ type: "UPDATE_GAME_STATE", payload: gameState });
+      uDispatch({ type: "UPDATE_STATUS", payload: gameState });
+    });
 
-    gameSocketRef.current.on(
-      "connect_error", (err) => showToast(err.message, "error")
+    gameSocketRef.current.on("connect_error", (err) =>
+      showToast(err.message, "error")
     );
 
     return () => {
@@ -107,21 +105,17 @@ const GameTimer = () => {
   return (
     <>
       <Flex alignItems="center">
-        <DisplayPhase mr={2}>
-          {currentDay}日目
-        </DisplayPhase>
-        <DisplayPhase>
-          {PHASE_MAP[currentPhase || "pre"]}
-        </DisplayPhase>
+        <DisplayPhase mr={2}>{currentDay}日目</DisplayPhase>
+        <DisplayPhase>{PHASE_MAP[currentPhase || "pre"]}</DisplayPhase>
       </Flex>
 
-      {currentPhase && changedAt &&
+      {currentPhase && changedAt && (
         <Countdown
           key={timerEnd}
           date={timerEnd}
-          renderer={({ minutes, seconds }) => (minutes * 60 + seconds)} 
+          renderer={({ minutes, seconds }) => minutes * 60 + seconds}
         />
-      }
+      )}
       <DisplayRole status={user.status}>
         {ROLE_MAP[user.role || "spectator"]}
       </DisplayRole>

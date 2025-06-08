@@ -6,14 +6,14 @@ import without from "lodash-es/without";
 const initialChannelState = {
   _id: "",
   channelName: "",
-  description: "",
+  channelDescription: "",
   users: [],
   channelAdmin: "",
   blockUsers: [],
   channel: {
     _id: "",
     channelName: "",
-    description: "",
+    channelDescription: "",
   },
   isGame: false,
   phase: {
@@ -31,7 +31,7 @@ function channelReducer(state = initialChannelState, action) {
       return { ...state, ...action.payload, isGame: true };
     case "LEAVE_CHANNEL":
       return initialChannelState;
-    case "USER_JOINED":{
+    case "USER_JOINED": {
       const users = unionBy(state.users, [action.payload], "_id");
       return { ...state, users };
     }
@@ -49,8 +49,8 @@ function channelReducer(state = initialChannelState, action) {
       return { ...state, blockUsers };
     }
     case "CHANNEL_SETTINGS": {
-      const { channelName, description } = action.payload;
-      return { ...state, channelName, description };
+      const { channelName, channelDescription } = action.payload;
+      return { ...state, channelName, channelDescription };
     }
     case "UPDATE_GAME_STATE": {
       const updatedUsersObj = action.payload.users;

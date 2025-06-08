@@ -2,7 +2,13 @@ import { useEffect, useReducer, useCallback, useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 
 import {
-  Box, Flex, Stack, FormControl, Spinner, Textarea, IconButton
+  Box,
+  Flex,
+  Stack,
+  FormControl,
+  Spinner,
+  Textarea,
+  IconButton,
 } from "@chakra-ui/react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
@@ -40,7 +46,8 @@ const Channel = () => {
     actions.resetForm();
   };
 
-  const handleScroll = useCallback(async () => { // 外部化
+  const handleScroll = useCallback(async () => {
+    // 外部化
     if (scrollRef.current && isSocketConnected) {
       const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
       if (scrollTop >= 0) {
@@ -62,10 +69,10 @@ const Channel = () => {
   }, [isSocketConnected, fetchMessages]);
 
   useEffect(() => {
-    if (blockUsers?.some((u) => u === user._id)) {
-      chDispatch({ type: "LEAVE_CHANNEL"});
+    if (blockUsers?.some((u) => u === user.userId)) {
+      chDispatch({ type: "LEAVE_CHANNEL" });
     }
-  }, [user._id, blockUsers, chDispatch]);
+  }, [user.userId, blockUsers, chDispatch]);
 
   useEffect(() => {
     if (isSocketConnected && messages.length === 0) fetchMessages();
@@ -82,13 +89,7 @@ const Channel = () => {
   return (
     <Stack justifyContent="flex-end" w="100%" h="100%" overflow="auto">
       {loading ? (
-        <Spinner
-          size="xl"
-          w={20}
-          h={20}
-          alignSelf="center"
-          margin="auto"
-        />
+        <Spinner size="xl" w={20} h={20} alignSelf="center" margin="auto" />
       ) : (
         <Flex
           overflowY="auto"
@@ -99,15 +100,16 @@ const Channel = () => {
           gap={3}
           w="100%"
         >
-          {messages && messages.map((m) => {
-            const chatUser = (m.sender === GAME_MASTER._id) ? GAME_MASTER :
-              users.find((u) => u._id === m.sender);
-            if (!chatUser) return null;
+          {messages &&
+            messages.map((m) => {
+              const chatUser =
+                m.userId === GAME_MASTER._id
+                  ? GAME_MASTER
+                  : users.find((u) => u._id === m.userId);
+              if (!chatUser) return null;
 
-            return (
-              <DisplayMessage key={m._id} message={m} user={chatUser} />
-            );
-          })}
+              return <DisplayMessage key={m._id} message={m} user={chatUser} />;
+            })}
         </Flex>
       )}
 

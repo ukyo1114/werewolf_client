@@ -10,6 +10,11 @@ const GuestLoginButton = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGuestLogin = async () => {
+    if (localStorage.getItem("userInfo")) {
+      navigate("/chats");
+      return;
+    }
+
     try {
       setIsLoading(true);
       const { data } = await axios.get("/api/user/guest");

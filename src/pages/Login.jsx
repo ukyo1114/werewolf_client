@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import {
@@ -27,11 +27,20 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
-  const { uDispatch } = useUserState();
+  const { uDispatch, chDispatch } = useUserState();
   const textColor = useColorModeValue("gray.600", "gray.400");
   const cardBg = useColorModeValue("white", "gray.800");
   const borderColor = useColorModeValue("gray.200", "gray.700");
   const iconColor = useColorModeValue("blue.500", "blue.300");
+
+  useEffect(() => {
+    if (localStorage.getItem("userInfo")) {
+      navigate("/chats");
+    } else {
+      uDispatch({ type: "LOGOUT" });
+      chDispatch({ type: "LEAVE_CHANNEL" });
+    }
+  }, [navigate, uDispatch, chDispatch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

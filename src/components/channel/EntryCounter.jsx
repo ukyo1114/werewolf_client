@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 
-import {
-  Flex, Button, useDisclosure,
-} from "@chakra-ui/react";
+import { Flex, Button, useDisclosure } from "@chakra-ui/react";
 
 import { useUserState } from "../../context/UserProvider.jsx";
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -12,7 +10,6 @@ import ModalTemplete from "../miscellaneous/ModalTemplete.jsx";
 import { EllipsisText } from "../miscellaneous/CustomComponents.jsx";
 import useNotification from "../../hooks/useNotification";
 import useJoinGame from "../../hooks/useJoinGame";
-import { errors, messages } from "../../messages";
 
 const EntryCounter = () => {
   const { user, currentChannel } = useUserState();
@@ -28,30 +25,16 @@ const EntryCounter = () => {
   useEffect(() => {
     if (entrySocketRef.current) return;
 
-    const auth = { auth: { token: user.token } };
-    entrySocketRef.current = io(
-      `${import.meta.env.VITE_SERVER_URL}/entry`,
-      auth,
-    );
+    const auth = { auth: { token: user.token, channelId } };
+    entrySocketRef.current = io(`${import.meta.env.VITE_SERVER_URL}/entry`, {
+      ...auth,
+      withCredentials: true,
+      transports: ["websocket"],
+      path: "/socket.io",
+    });
 
-    entrySocketRef.current.on("connect_response", async ({ gameId }) => {
-      if (gameId) {
-        showToast(messages.NAVIGATE_GAME, "info");
-        await joinGame(gameId);
-      } else {
-        try {
-          const response = await entrySocketRef.current.emitWithAck(
-            "joinChannel",
-            channelId,
-          );
-          setUsers(response.users);
-        } catch (error) {
-          showToast(
-            error?.response?.data?.error || errors.CONNECTION_FAILED, "error"
-          );
-          entrySocketRef.current.disconnect();
-        }
-      }
+    entrySocketRef.current.on("connect_response", (users) => {
+      setUsers(users);
     });
 
     entrySocketRef.current.on("entryUpdate", (data) => {
@@ -63,28 +46,24 @@ const EntryCounter = () => {
     });
 
     entrySocketRef.current.on("connect_error", (err) => {
-      showToast(err.message, "error");
+      entrySocketRef.current.disconnect();
     });
 
     return () => {
       entrySocketRef.current.disconnect();
     };
-  }, [user.token, channelId, showToast, joinGame]);
+  }, [user.token, channelId, joinGame]);
 
   useEffect(() => {
-    if (users.some((u) => u === user._id)) {
-      setEntryButtonState(true);
-    } else {
-      setEntryButtonState(false);
-    }
-  }, [users, user._id, setEntryButtonState]);
+    setEntryButtonState(users.some((u) => u === user.userId));
+  }, [users, user.userId, setEntryButtonState]);
 
   return (
     <>
       <EllipsisText fontSize="lg" fontWeight="bold" color="gray.700">
         {channelName}
       </EllipsisText>
-      
+
       <Flex alignItems="center">
         <EllipsisText
           fontSize="lg"
@@ -105,11 +84,28 @@ const EntryCounter = () => {
         <Button
           data-testid="entry-button" // テスト用
           colorScheme={entryButtonState ? "pink" : "teal"}
-          onClick={() =>
-            entryButtonState
-              ? entrySocketRef.current.emit("cancelEntry")
-              : entrySocketRef.current.emit("registerEntry")
-          }
+          onClick={() => {
+            if (entryButtonState) {
+              entrySocketRef.current.emit("cancelEntry", (response) => {
+                if (!response.success) {
+                  showToast(
+                    response.message ||
+                      "エントリーをキャンセルできませんでした",
+                    "error"
+                  );
+                }
+              });
+            } else {
+              entrySocketRef.current.emit("registerEntry", (response) => {
+                if (!response.success) {
+                  showToast(
+                    response.message || "エントリーに失敗しました",
+                    "error"
+                  );
+                }
+              });
+            }
+          }}
         >
           {entryButtonState ? "取消" : "参加"}
         </Button>
@@ -121,9 +117,10 @@ const EntryCounter = () => {
           onClose={userList.onClose}
           title={"エントリー中のユーザー"}
         >
-          <UserList userList={currentChannel.users.filter((user) =>
-              users.some((u) => u === user._id))
-            }
+          <UserList
+            userList={currentChannel.users.filter((user) =>
+              users.some((u) => u === user._id)
+            )}
           />
         </ModalTemplete>
       )}

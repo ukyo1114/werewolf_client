@@ -37,7 +37,6 @@ const Channels = () => {
       navigate("/");
     } else {
       const userIn = JSON.parse(userInfo);
-      console.log("userIn", userIn);
       uDispatch({ type: "LOGIN", payload: userIn });
     }
   }, [navigate, uDispatch]);

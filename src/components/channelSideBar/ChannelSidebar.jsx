@@ -15,11 +15,12 @@ import {
 import { useUserState } from "../../context/UserProvider.jsx";
 import UserList from "../miscellaneous/UserList.jsx";
 import BlockModal from "./BlockModal.jsx";
-import ChannelSettingsModal from "./ChannelSettingsModal.jsx"
+import ChannelSettingsModal from "./ChannelSettingsModal.jsx";
 import useNotification from "../../hooks/useNotification";
 import ModalTemplete from "../miscellaneous/ModalTemplete.jsx";
 import {
-  SidebarButton, iconProps,
+  SidebarButton,
+  iconProps,
 } from "../miscellaneous/CustomComponents.jsx";
 import { SideBar } from "../miscellaneous/SideBar.jsx";
 import SpectatorModal from "./spectate/SpectatorModal.jsx";
@@ -29,7 +30,7 @@ import { messages } from "../../messages.js";
 const ChannelSidebar = () => {
   const { user, currentChannel, chDispatch } = useUserState();
   const { _id: channelId, channelAdmin, users } = currentChannel;
-  const isAdmin = channelAdmin === user._id;
+  const isAdmin = channelAdmin === user.userId;
   const showToast = useNotification();
 
   const userListModal = useDisclosure();
@@ -41,11 +42,10 @@ const ChannelSidebar = () => {
   const leaveChannel = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-
-      await axios.put(`/api/channel/leave`, { channelId }, config);
+      await axios.delete(`/api/channel/leave/${channelId}`, config);
 
       showToast(messages.LEFT_CHANNEL, "success");
-      chDispatch({ type: "LEAVE_CHANNEL"});
+      chDispatch({ type: "LEAVE_CHANNEL" });
     } catch (error) {
       showToast(error?.response?.data?.error, "error");
     }
@@ -53,10 +53,7 @@ const ChannelSidebar = () => {
 
   return (
     <SideBar>
-      <SidebarButton
-        label="チャンネル情報"
-        onClick={chDescription.onOpen}
-      >
+      <SidebarButton label="チャンネル情報" onClick={chDescription.onOpen}>
         <FaInfoCircle {...iconProps} />
       </SidebarButton>
 
@@ -106,7 +103,7 @@ const ChannelSidebar = () => {
       >
         <DisplayChDescription />
       </ModalTemplete>
-    
+
       <ModalTemplete
         isOpen={userListModal.isOpen}
         onClose={userListModal.onClose}

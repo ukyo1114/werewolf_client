@@ -13,25 +13,21 @@ const useChatSocket = ({ mDispatch }) => {
 
   useEffect(() => {
     if (chatSocketRef.current) return;
-    
-    const auth = { auth: { token: user.token } };
-    chatSocketRef.current = io(
-      `${import.meta.env.VITE_SERVER_URL}/chat`,
-      auth,
-    );
 
-    chatSocketRef.current.on("connect", () => {
-      chatSocketRef.current.emit("joinChannel", channelId, (response) => {
-        if (response.success) {
-          setIsSocketConnected(true);
-        } else {
-          showToast(response.err, "error");
-        }
-      });
+    const auth = { auth: { token: user.token, channelId } };
+    chatSocketRef.current = io(`${import.meta.env.VITE_SERVER_URL}/chat`, {
+      ...auth,
+      withCredentials: true,
+      transports: ["websocket"],
+      path: "/socket.io",
     });
 
-    chatSocketRef.current.on("messageReceived", (newMessageReceived) => {
-      mDispatch({ type: "RECEIVE_MESSAGE", payload: newMessageReceived });
+    chatSocketRef.current.on("connect", () => {
+      setIsSocketConnected(true);
+    });
+
+    chatSocketRef.current.on("newMessage", (newMessage) => {
+      mDispatch({ type: "RECEIVE_MESSAGE", payload: newMessage });
     });
 
     chatSocketRef.current.on("cSettingsChanged", (updatedChannel) => {
@@ -55,7 +51,7 @@ const useChatSocket = ({ mDispatch }) => {
     });
 
     chatSocketRef.current.on("connect_error", (err) => {
-      showToast(err.message, "error");
+      showToast(`チャットエラー: ${err.message}`, "error");
     });
 
     return () => {
@@ -64,7 +60,14 @@ const useChatSocket = ({ mDispatch }) => {
         chatSocketRef.current = null;
       }
     };
-  }, [user.token, channelId, setIsSocketConnected, chDispatch, mDispatch, showToast]);
+  }, [
+    user.token,
+    channelId,
+    setIsSocketConnected,
+    chDispatch,
+    mDispatch,
+    showToast,
+  ]);
 
   return isSocketConnected;
 };

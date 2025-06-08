@@ -37,40 +37,60 @@ const ProfileSettingsModal = ({ onClose }) => {
     inputRef,
   });
 
-  const handleSubmit = useCallback(async (values, actions) => {
-    const { userName, isUserNameChanged } = values;
-    if (!isUserNameChanged && !isPictureChanged) return;
-    actions.setSubmitting(true);
-    const payload = {};
-    if (isUserNameChanged && userName) payload.userName = userName;
-    if (isPictureChanged && pic) payload.pic = pic;
+  const handleSubmit = useCallback(
+    async (values, actions) => {
+      const { userName, isUserNameChanged } = values;
+      if (!isUserNameChanged && !isPictureChanged) return;
+      actions.setSubmitting(true);
+      const payload = {};
+      if (isUserNameChanged && userName) payload.userName = userName;
+      if (isPictureChanged && pic) payload.pic = pic;
 
-    try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      try {
+        const config = { headers: { Authorization: `Bearer ${user.token}` } };
 
-      await axios.put(
-        "/api/user/profile",
-        payload,
-        config,
-      );
-      if (isUserNameChanged && userName) {
-        uDispatch({ type: "CHANGE_NAME", payload: userName });
+        const { data } = await axios.put("/api/user/profile", payload, config);
+        if (isUserNameChanged && userName) {
+          uDispatch({ type: "CHANGE_NAME", payload: userName });
+        }
+        if (data.pic) {
+          uDispatch({ type: "CHANGE_PIC", payload: data.pic });
+        }
+
+        localStorage.setItem(
+          "userInfo",
+          JSON.stringify({
+            ...JSON.parse(localStorage.getItem("userInfo")),
+            userName: user.userName,
+            pic: user.pic,
+          })
+        );
+
+        showToast(messages.PROFILE_SETTINGS_CHANGED, "success");
+      } catch (error) {
+        showToast(
+          error?.response?.data?.error || errors.PROFILE_SETTINGS_FAILED,
+          "error"
+        );
+      } finally {
+        actions.setSubmitting(false);
+        onClose();
       }
-      
-      showToast(messages.PROFILE_SETTINGS_CHANGED, "success");
-    } catch (error) {
-      showToast(
-        error?.response?.data?.error || errors.PROFILE_SETTINGS_FAILED,
-        "error"
-      );
-    } finally {
-      actions.setSubmitting(false);
-      onClose();
-    }
-  }, [isPictureChanged, pic, user.token, uDispatch, showToast, onClose]);
+    },
+    [
+      isPictureChanged,
+      pic,
+      user.token,
+      uDispatch,
+      showToast,
+      onClose,
+      user.userName,
+      user.pic,
+    ]
+  );
 
   const handleImageClick = useCallback(() => {
-    if (isPictureChanged)  inputRef.current.click();
+    if (isPictureChanged) inputRef.current.click();
   }, [isPictureChanged]);
 
   return (
@@ -79,7 +99,7 @@ const ProfileSettingsModal = ({ onClose }) => {
         <Formik
           initialValues={{
             isUserNameChanged: false,
-            userName: user.name,
+            userName: user.userName,
           }}
           validationSchema={profileSettingsValidationSchema}
           onSubmit={handleSubmit}
@@ -87,22 +107,21 @@ const ProfileSettingsModal = ({ onClose }) => {
           {(formik) => (
             <Form
               style={{
-                display: "flex", flexDirection: "column", overflow: "hidden"
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
               }}
             >
               <FormControl id="isUserNameChanged" mb={2}>
                 <Field name="isUserNameChanged">
                   {({ field }) => (
-                    <Checkbox
-                      {...field}
-                      isChecked={field.value}
-                    >
+                    <Checkbox {...field} isChecked={field.value}>
                       <EllipsisText>ユーザー名を変更する</EllipsisText>
                     </Checkbox>
                   )}
                 </Field>
               </FormControl>
-              
+
               <FormControl id="userName" mb={3}>
                 <Field name="userName">
                   {({ field }) => (
@@ -120,7 +139,7 @@ const ProfileSettingsModal = ({ onClose }) => {
                   style={{ color: "red", fontSize: "smaller" }}
                 />
               </FormControl>
-              
+
               <FormControl id="isPictureChanged" mb={2}>
                 <Checkbox
                   id="isPictureChanged"
@@ -178,14 +197,14 @@ const ProfileSettingsModal = ({ onClose }) => {
           )}
         </Formik>
       </Box>
-      
-      {cropImage &&
+
+      {cropImage && (
         <ImageCropper
           imgSrc={imgSrc}
           setPic={setPic}
           onClose={() => setCropImage(false)}
         />
-      }
+      )}
     </Stack>
   );
 };

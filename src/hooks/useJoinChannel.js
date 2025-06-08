@@ -2,26 +2,44 @@ import { useCallback } from "react";
 import axios from "axios";
 import { useUserState } from "../context/UserProvider.jsx";
 import useNotification from "./useNotification";
-import { errors } from "../messages";
+import { errors, messages } from "../messages";
 
 export const useJoinChannel = () => {
   const { user, chDispatch } = useUserState();
   const showToast = useNotification();
 
-  const joinChannel = useCallback(async (channelId, password) => {
-    try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+  const joinChannel = useCallback(
+    async (channelId, password) => {
+      try {
+        const config = { headers: { Authorization: `Bearer ${user.token}` } };
 
-      const { data: { channel } } = await axios.post(
-        "/api/channel/enter",
-        { channelId, password: password || "" },
-        config,
-      );
-      chDispatch({ type: "JOIN_CHANNEL", payload: channel });
-    } catch (error) {
-      showToast(error?.response?.data?.error || errors.CHANNEL_ENTER_FAILED, "error");
-    }
-  }, [user.token, chDispatch, showToast]);
+        const {
+          data: { channelName, channelDescription, channelAdmin, channelUsers },
+        } = await axios.put(
+          `/api/channel/join/${channelId}`,
+          { password: password || null },
+          config
+        );
+
+        const channel = {
+          _id: channelId,
+          channelName,
+          channelDescription,
+          channelAdmin,
+          users: channelUsers,
+        };
+
+        chDispatch({ type: "JOIN_CHANNEL", payload: channel });
+        showToast(messages.CHANNEL_JOINED, "success");
+      } catch (error) {
+        showToast(
+          error?.response?.data?.error || errors.CHANNEL_ENTER_FAILED,
+          "error"
+        );
+      }
+    },
+    [user.token, chDispatch, showToast]
+  );
 
   return joinChannel;
 };

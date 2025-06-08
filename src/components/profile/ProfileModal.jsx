@@ -7,7 +7,7 @@ const ProfileModal = () => {
 
   return (
     <Stack w="100%" p={2} overflow="auto">
-      <DisplayUser key={user._id} user={user} />
+      <DisplayUser key={user.userId} user={user} />
     </Stack>
   );
 };

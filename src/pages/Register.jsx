@@ -22,7 +22,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object({
-  username: Yup.string()
+  userName: Yup.string()
     .required("ユーザー名は必須です")
     .min(3, "ユーザー名は3文字以上で入力してください")
     .max(20, "ユーザー名は20文字以内で入力してください"),
@@ -59,7 +59,7 @@ const Register = () => {
     try {
       const { data } = await axios.post("/api/user/register", {
         token,
-        userName: values.username,
+        userName: values.userName,
         password: values.password,
       });
 
@@ -75,7 +75,7 @@ const Register = () => {
         "userInfo",
         JSON.stringify({
           ...data,
-          userName: values.username,
+          userName: values.userName,
           pic: null,
         })
       );
@@ -121,7 +121,7 @@ const Register = () => {
         >
           <Formik
             initialValues={{
-              username: "",
+              userName: "",
               password: "",
               confirmPassword: "",
             }}
@@ -132,12 +132,12 @@ const Register = () => {
               <Form>
                 <VStack spacing="6">
                   <FormControl
-                    id="username"
+                    id="userName"
                     isRequired
-                    isInvalid={errors.username && touched.username}
+                    isInvalid={errors.userName && touched.userName}
                   >
                     <FormLabel fontWeight="bold">ユーザー名</FormLabel>
-                    <Field name="username">
+                    <Field name="userName">
                       {({ field }) => (
                         <Input
                           {...field}
@@ -157,7 +157,7 @@ const Register = () => {
                       ゲームやチャットで表示される名前です。後から変更することもできます。
                     </Text>
                     <ErrorMessage
-                      name="username"
+                      name="userName"
                       component={Text}
                       style={{ color: "red.500", fontSize: "sm", mt: 1 }}
                     />

@@ -22,12 +22,12 @@ const DisplayUser = ({ children, user, ...props }) => {
         mr={4}
       />
       <Flex flexDir="column" width="100%" overflowX="hidden">
-        <EllipsisText fontSize="lg">{user.name}</EllipsisText>
+        <EllipsisText fontSize="lg">{user.userName}</EllipsisText>
         {children && <StyledDivider />}
         {children}
       </Flex>
-    </ Flex>
-  )
+    </Flex>
+  );
 };
 
 export default DisplayUser;

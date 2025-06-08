@@ -3,11 +3,7 @@ import axios from "axios";
 import { useUserState } from "../context/UserProvider.jsx";
 import useNotification from "./useNotification";
 
-const useChatMessages = ({
-  messages,
-  mDispatch,
-  messagesCompletedRef,
-}) => {
+const useChatMessages = ({ messages, mDispatch, messagesCompletedRef }) => {
   const [loading, setLoading] = useState(false);
   const { user, currentChannel } = useUserState();
   const { _id: channelId, phase } = currentChannel;
@@ -17,8 +13,9 @@ const useChatMessages = ({
     try {
       const config = {
         headers: { Authorization: `Bearer ${user.token}` },
-        params: { messageId: messages.length > 0 ? 
-          messages[messages.length - 1]._id : null
+        params: {
+          messageId:
+            messages.length > 0 ? messages[messages.length - 1]._id : null,
         },
       };
 
@@ -29,20 +26,22 @@ const useChatMessages = ({
       if (data.length < 50) messagesCompletedRef.current = true;
 
       const uniqueMessages = data.filter(
-        (newMsg) => !messages.some((msg) => msg._id === newMsg._id),
+        (newMsg) => !messages.some((msg) => msg._id === newMsg._id)
       );
 
       if (uniqueMessages.length > 0) {
         const allMessages = [...messages, ...uniqueMessages].sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
+        console.log("allMessages", allMessages);
         mDispatch({ type: "FETCH_MESSAGES", payload: allMessages });
       }
 
       setLoading(false);
     } catch (error) {
       showToast(
-        error?.response?.data?.error || "メッセージの読み込みに失敗しました", "error"
+        error?.response?.data?.error || "メッセージの読み込みに失敗しました",
+        "error"
       );
     }
   }, [
@@ -67,26 +66,31 @@ const useChatMessages = ({
     return true;
   }, [user, phase, showToast]);
 
-  const sendMessage = useCallback(async (newMessage) => {
-    if (!canSendMessage()) return;
+  const sendMessage = useCallback(
+    async (newMessage) => {
+      if (!canSendMessage()) return;
 
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      await axios.post(
-        "/api/message",
-        { content: newMessage, channelId }, config,
-      );
-    } catch (error) {
-      showToast(
-        error?.response?.data?.error || "メッセージの送信に失敗しました", "error"
-      );
-    }
-  }, [canSendMessage, user.token, channelId, showToast]);
+      try {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+        await axios.post(
+          `/api/message/${channelId}`,
+          { message: newMessage },
+          config
+        );
+      } catch (error) {
+        showToast(
+          error?.response?.data?.error || "メッセージの送信に失敗しました",
+          "error"
+        );
+      }
+    },
+    [canSendMessage, user.token, channelId, showToast]
+  );
 
   return { loading, fetchMessages, sendMessage };
 };

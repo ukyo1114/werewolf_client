@@ -3,7 +3,11 @@ import axios from "axios";
 
 import {
   Stack,
-  Tabs, TabList, Tab, TabPanels, TabPanel,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
 } from "@chakra-ui/react";
 
 import { useUserState } from "../../context/UserProvider.jsx";
@@ -22,19 +26,22 @@ const BlockModal = () => {
   const { _id: channelId, channelAdmin } = currentChannel;
 
   const fetchBlockUserList = useCallback(async () => {
-    if (channelAdmin !== user._id) return;
+    if (channelAdmin !== user.userId) return;
 
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
 
-      const { data: { blockUsers } } = await axios.get(
-        `api/block/user-list/${channelId}`,
-        config,
-      );
-      
+      const {
+        data: { blockUsers },
+      } = await axios.get(`api/block/user-list/${channelId}`, config);
+
       setBlockUserList(blockUsers);
     } catch (error) {
-      showToast(error?.response?.data?.error || "ブロック済みユーザーの取得に失敗しました", "error");
+      showToast(
+        error?.response?.data?.error ||
+          "ブロック済みユーザーの取得に失敗しました",
+        "error"
+      );
     }
   }, [user, channelId, channelAdmin, setBlockUserList, showToast]);
 
@@ -69,24 +76,20 @@ const BlockModal = () => {
   );
 };
 
-const UserListTab = ({
-  selectedUser,
-  setSelectedUser,
-  setBlockUserList,
-}) => {
+const UserListTab = ({ selectedUser, setSelectedUser, setBlockUserList }) => {
   const { user, currentChannel } = useUserState();
   const { _id: channelId, channelAdmin, users } = currentChannel;
   const showToast = useNotification();
 
   const block = useCallback(async () => {
-    if (channelAdmin !== user._id) return;
+    if (channelAdmin !== user.userId) return;
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
 
       await axios.put(
         "api/block/register",
         { channelId, selectedUser },
-        config,
+        config
       );
 
       setBlockUserList((prevBlockUserList) => {
@@ -99,7 +102,10 @@ const UserListTab = ({
       showToast(messages.BLOCK_COMPLETED, "success");
       setSelectedUser(null);
     } catch (error) {
-      showToast(error?.response?.data?.error || "ブロックに失敗しました", "error");
+      showToast(
+        error?.response?.data?.error || "ブロックに失敗しました",
+        "error"
+      );
     }
   }, [
     user,
@@ -116,18 +122,20 @@ const UserListTab = ({
     <Stack w="100%" overflow="hidden">
       <Stack p={2} gap={4} flex="1" overflow="auto">
         {users.length > 1 ? (
-          users.filter((u) => u._id !== user._id).map((u) => (
-            <DisplayUser
-              key={u._id}
-              user={u}
-              cursor="pointer"
-              onClick={() => setSelectedUser(u._id)}
-              bg={selectedUser === u._id ? "green.100" : "white"}
-              _hover={{
-                bg: selectedUser !== u._id ? "gray.200" : undefined,
-              }}
-            />
-          ))
+          users
+            .filter((u) => u._id !== user.userId)
+            .map((u) => (
+              <DisplayUser
+                key={u._id}
+                user={u}
+                cursor="pointer"
+                onClick={() => setSelectedUser(u._id)}
+                bg={selectedUser === u._id ? "green.100" : "white"}
+                _hover={{
+                  bg: selectedUser !== u._id ? "gray.200" : undefined,
+                }}
+              />
+            ))
         ) : (
           <StyledText>ユーザーがいません</StyledText>
         )}
@@ -151,25 +159,26 @@ const BlockedUserListTab = ({
   const showToast = useNotification();
 
   const cancelBlock = useCallback(async () => {
-    if (channelAdmin !== user._id) return;
+    if (channelAdmin !== user.userId) return;
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
 
-      await axios.put(
-        "api/block/cancel", { channelId, selectedBUser }, config,
-      );
+      await axios.put("api/block/cancel", { channelId, selectedBUser }, config);
 
       setBlockUserList((prevBlockUserList) => {
-        const updatedBUserList = prevBlockUserList.filter((user) =>
-          user._id !== selectedBUser
-        )
+        const updatedBUserList = prevBlockUserList.filter(
+          (user) => user._id !== selectedBUser
+        );
         return updatedBUserList;
-      })
+      });
 
       showToast(messages.BLOCK_CANCEL_COMPLETED, "success");
       setSelectedBUser(null);
     } catch (error) {
-      showToast(error.response?.data?.error || "ブロック済ユーザーの取得に失敗しました", "error");
+      showToast(
+        error.response?.data?.error || "ブロック済ユーザーの取得に失敗しました",
+        "error"
+      );
     }
   }, [
     user,

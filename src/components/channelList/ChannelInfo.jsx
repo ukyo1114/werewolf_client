@@ -13,7 +13,6 @@ import {
 
 import { useUserState } from "../../context/UserProvider.jsx";
 import { useJoinChannel } from "../../hooks/useJoinChannel";
-import { EllipsisText } from "../miscellaneous/CustomComponents.jsx";
 import ModalButton from "../miscellaneous/ModalButton.jsx";
 
 const ChannelInfo = ({ selectedChannel }) => {

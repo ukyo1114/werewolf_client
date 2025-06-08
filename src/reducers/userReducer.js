@@ -1,5 +1,5 @@
 const initialUserState = {
-  _id: "",
+  userId: "",
   userName: "",
   pic: "",
   token: "",
@@ -20,9 +20,11 @@ function userReducer(state = initialUserState, action) {
     case "LOGOUT":
       return initialUserState;
     case "CHANGE_NAME":
-      return { ...state, name: action.payload };
+      return { ...state, userName: action.payload };
+    case "CHANGE_PIC":
+      return { ...state, pic: action.payload };
     case "UPDATE_STATUS": {
-      const user = action.payload.users[state._id];
+      const user = action.payload.users[state.userId];
       return user ? { ...state, status: user.status } : state;
     }
     default:

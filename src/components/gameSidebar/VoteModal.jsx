@@ -13,22 +13,22 @@ const VoteModal = ({ mode, onClose }) => {
   const { users, phase } = currentChannel;
   const [button, setButton] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
-/* 
+  /* 
   const handleOnClose = useCallback(() => {
     setSelectedUser();
     onClose();
   }, [setSelectedUser, onClose]); */
-/* 
+  /* 
   useEffect(() => {
     handleOnClose();
   }, [handleOnClose, gameState.phase]); */
 
   useEffect(() => {
     const buttons = {
-      vote: (<VoteButton selectedUser={selectedUser} onClose={onClose} />),
-      fortune: (<FortuneButton selectedUser={selectedUser} onClose={onClose} />),
-      guard: (<GuardButton selectedUser={selectedUser} onClose={onClose} />),
-      attack: (<AttackButton selectedUser={selectedUser} onClose={onClose} />),
+      vote: <VoteButton selectedUser={selectedUser} onClose={onClose} />,
+      fortune: <FortuneButton selectedUser={selectedUser} onClose={onClose} />,
+      guard: <GuardButton selectedUser={selectedUser} onClose={onClose} />,
+      attack: <AttackButton selectedUser={selectedUser} onClose={onClose} />,
     };
     setButton(buttons[mode]);
   }, [selectedUser, onClose, phase, setButton, mode]);
@@ -38,11 +38,11 @@ const VoteModal = ({ mode, onClose }) => {
       <Stack w="100%" p={2} gap={4} overflow="auto">
         {users.map((u) => {
           const hidden =
-            u._id === user._id ||
+            u._id === user.userId ||
             u.status !== "alive" ||
             (phase.currentPhase === "night" && u._id === user.partnerId);
           if (hidden) return null;
-          
+
           return (
             <DisplayUser
               key={u._id}
@@ -54,9 +54,9 @@ const VoteModal = ({ mode, onClose }) => {
                 bg: selectedUser !== u._id ? "gray.200" : undefined,
               }}
             />
-          )
+          );
         })}
-      </Stack> 
+      </Stack>
       {button}
     </Stack>
   );
@@ -71,16 +71,19 @@ const VoteButton = ({ selectedUser, onClose }) => {
     if (selectedUser) {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        
+
         await axios.post(
           "/api/game/vote",
           { gameId: channelId, selectedUser },
-          config,
+          config
         );
 
         showToast("投票しました", "success");
       } catch (error) {
-        showToast(error?.response?.data?.error || "投票に失敗しました", "error");
+        showToast(
+          error?.response?.data?.error || "投票に失敗しました",
+          "error"
+        );
       } finally {
         onClose();
       }
@@ -109,12 +112,15 @@ const FortuneButton = ({ selectedUser, onClose }) => {
         await axios.post(
           "/api/game/fortune",
           { gameId: channelId, selectedUser },
-          config,
+          config
         );
 
         showToast("送信しました", "success");
       } catch (error) {
-        showToast(error?.response?.data?.error || "送信に失敗しました", "error");
+        showToast(
+          error?.response?.data?.error || "送信に失敗しました",
+          "error"
+        );
       } finally {
         onClose();
       }
@@ -143,12 +149,15 @@ const GuardButton = ({ selectedUser, onClose }) => {
         await axios.post(
           "/api/game/guard",
           { gameId: channelId, selectedUser },
-          config,
+          config
         );
 
         showToast("送信しました", "success");
       } catch (error) {
-        showToast(error?.response?.data?.error || "送信に失敗しました", "error");
+        showToast(
+          error?.response?.data?.error || "送信に失敗しました",
+          "error"
+        );
       } finally {
         onClose();
       }
@@ -177,12 +186,15 @@ const AttackButton = ({ selectedUser, onClose }) => {
         await axios.post(
           "/api/game/attack",
           { gameId: channelId, selectedUser },
-          config,
+          config
         );
-        
+
         showToast("送信しました", "success");
       } catch (error) {
-        showToast(error?.response?.data?.error || "送信に失敗しました", "error");
+        showToast(
+          error?.response?.data?.error || "送信に失敗しました",
+          "error"
+        );
       } finally {
         onClose();
       }

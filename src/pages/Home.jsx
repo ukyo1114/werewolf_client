@@ -29,13 +29,9 @@ const Home = () => {
   const highlightColor = useColorModeValue("blue.500", "blue.300");
 
   useEffect(() => {
-    if (localStorage.getItem("userInfo")) {
-      navigate("/chats");
-    } else {
-      uDispatch({ type: "LOGOUT" });
-      chDispatch({ type: "LEAVE_CHANNEL" });
-    }
-  }, [navigate, uDispatch, chDispatch]);
+    uDispatch({ type: "LOGOUT" });
+    chDispatch({ type: "LEAVE_CHANNEL" });
+  }, [uDispatch, chDispatch]);
 
   const features = [
     {
@@ -125,8 +121,6 @@ const Home = () => {
               <Divider />
 
               <Button
-                as={Link}
-                to="/login"
                 colorScheme="blue"
                 size="lg"
                 h="60px"
@@ -136,6 +130,14 @@ const Home = () => {
                 gap={3}
                 _hover={{ transform: "translateY(-2px)", shadow: "md" }}
                 transition="all 0.2s"
+                onClick={() => {
+                  const userInfo = localStorage.getItem("userInfo");
+                  if (userInfo) {
+                    navigate("/chats");
+                  } else {
+                    navigate("/login");
+                  }
+                }}
               >
                 <Icon as={FaSignInAlt} w={5} h={5} />
                 <Text>ログイン</Text>
