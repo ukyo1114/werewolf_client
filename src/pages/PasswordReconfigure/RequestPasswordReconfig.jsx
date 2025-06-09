@@ -4,7 +4,7 @@ import EmailForm from "./EmailForm";
 import SuccessView from "./SuccessView";
 import useNotification from "../../commonHooks/useNotification";
 
-const RequestPasswordReconfigure = () => {
+const RequestPasswordReconfig = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState("");
@@ -33,4 +33,4 @@ const RequestPasswordReconfigure = () => {
   );
 };
 
-export default RequestPasswordReconfigure;
+export default RequestPasswordReconfig;

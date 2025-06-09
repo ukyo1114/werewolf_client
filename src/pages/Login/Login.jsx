@@ -159,7 +159,7 @@ const Login = () => {
 
                 <HStack justify="flex-end" spacing={2} mt={-2}>
                   <Link
-                    to="/request-password-reconfigure"
+                    to="/request-password-reconfig"
                     color="blue.500"
                     fontSize="sm"
                     fontWeight="medium"

@@ -6,7 +6,7 @@ import Home from "./pages/Home/Home.jsx";
 import HowToPlay from "./pages/HowToPlay.jsx";
 import Login from "./pages/Login/Login.jsx";
 import Register from "./pages/Register.jsx";
-import RequestPasswordReconfigure from "./pages/PasswordReconfigure/PasswordReconfigure.jsx";
+import RequestPasswordReconfig from "./pages/PasswordReconfigure/RequestPasswordReconfig.jsx";
 
 const Channels = lazy(() => import("./pages/Channels.jsx"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword.jsx"));
@@ -28,8 +28,8 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route
-          path="/request-password-reconfigure"
-          element={<RequestPasswordReconfigure />}
+          path="/request-password-reconfig"
+          element={<RequestPasswordReconfig />}
         />
         <Route path="/register/:token" element={<Register />} />
       </Routes>

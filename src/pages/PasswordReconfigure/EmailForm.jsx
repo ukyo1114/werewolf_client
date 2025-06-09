@@ -103,6 +103,7 @@ const EmailForm = ({ onSubmit, isLoading }) => {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="example@example.com"
                       size="lg"
+                      autoComplete="email"
                       _focus={{
                         borderColor: "blue.500",
                         boxShadow: "0 0 0 1px var(--chakra-colors-blue-500)",
