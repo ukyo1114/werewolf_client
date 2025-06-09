@@ -7,9 +7,9 @@ import HowToPlay from "./pages/HowToPlay.jsx";
 import Login from "./pages/Login/Login.jsx";
 import Register from "./pages/Register.jsx";
 import RequestPasswordReconfig from "./pages/PasswordReconfigure/RequestPasswordReconfig.jsx";
+import ReconfigPassword from "./pages/ReconfigPassword/ReconfigPassword.jsx";
 
 const Channels = lazy(() => import("./pages/Channels.jsx"));
-const ResetPassword = lazy(() => import("./pages/ResetPassword.jsx"));
 const SendRegistrationEmail = lazy(
   () => import("./pages/SendRegistrationEmail/SendRegistrationEmail.jsx")
 );
@@ -21,7 +21,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/how-to-play" element={<HowToPlay />} />
         <Route path="/chats" element={<Channels />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route
+          path="/reconfig-password/:token"
+          element={<ReconfigPassword />}
+        />
         <Route
           path="/send-registration-email"
           element={<SendRegistrationEmail />}
