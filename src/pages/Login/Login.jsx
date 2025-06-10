@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import {
   Container,
@@ -16,6 +16,7 @@ import {
   Divider,
   InputGroup,
   InputLeftElement,
+  Link,
 } from "@chakra-ui/react";
 import { FaUser, FaLock, FaUserFriends, FaSignInAlt } from "react-icons/fa";
 import { useUserState } from "../../context/UserProvider";
@@ -159,13 +160,10 @@ const Login = () => {
 
                 <HStack justify="flex-end" spacing={2} mt={-2}>
                   <Link
+                    as={RouterLink}
                     to="/request-password-reconfig"
                     color="blue.500"
-                    fontSize="sm"
-                    fontWeight="medium"
-                    _hover={{
-                      color: "blue.600",
-                    }}
+                    _hover={{ textDecoration: "none", color: "blue.600" }}
                     transition="all 0.2s"
                   >
                     パスワードをお忘れですか？
@@ -213,7 +211,7 @@ const Login = () => {
                 アカウントをお持ちでない方は
               </Text>
               <Link
-                as={Link}
+                as={RouterLink}
                 to="/send-registration-email"
                 color="blue.500"
                 fontWeight="medium"

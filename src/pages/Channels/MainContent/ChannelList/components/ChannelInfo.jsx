@@ -11,9 +11,9 @@ import {
   Badge,
 } from "@chakra-ui/react";
 
-import { useUserState } from "../../context/UserProvider.jsx";
-import { useJoinChannel } from "../../hooks/useJoinChannel";
-import ModalButton from "../miscellaneous/ModalButton.jsx";
+import { useUserState } from "../../../../../context/UserProvider";
+import { useJoinChannel } from "../../../hooks/useJoinChannel";
+import ModalButton from "../../../../../components/miscellaneous/ModalButton";
 
 const ChannelInfo = ({ selectedChannel }) => {
   const { user } = useUserState();

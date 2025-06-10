@@ -487,7 +487,8 @@ const HowToPlay = () => {
               display="inline-flex"
               alignItems="center"
               color="blue.500"
-              _hover={{ textDecoration: "none", color: "blue.600" }}
+              _hover={{ textDecoration: "underline", color: "blue.600" }}
+              textDecoration="underline"
               transition="all 0.2s"
               fontSize={{ base: "sm", md: "md" }}
             >

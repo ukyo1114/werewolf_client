@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
-
-import { useUserState } from "../../context/UserProvider.jsx";
+import { useUserState } from "../../../../context/UserProvider";
 import {
   Box,
   Divider,
@@ -11,15 +10,13 @@ import {
   useDisclosure,
   Text,
 } from "@chakra-ui/react";
-
-import { FaEllipsisH } from "react-icons/fa";
-
-import ChatLoading from "../ChatLoading.jsx";
-import ChannelInfo from "./ChannelInfo.jsx";
-import useNotification from "../../hooks/useNotification";
-import { errors } from "../../messages";
-import ModalTemplete from "../miscellaneous/ModalTemplete.jsx";
-import { EllipsisText } from "../miscellaneous/CustomComponents.jsx";
+import { FaEllipsisH, FaCheck } from "react-icons/fa";
+import ChatLoading from "../../../../components/ChatLoading";
+import ChannelInfo from "./components/ChannelInfo";
+import useNotification from "../../../../commonHooks/useNotification";
+import { errors } from "../../../../messages";
+import ModalTemplete from "../../../../components/miscellaneous/ModalTemplete";
+import { EllipsisText } from "../../../../components/miscellaneous/CustomComponents";
 
 const ChannelList = ({ showJoinedCh }) => {
   const { user, isMobile } = useUserState();
@@ -74,26 +71,55 @@ const ChannelList = ({ showJoinedCh }) => {
 
   return channelList.length > 0 ? (
     <Stack overflowY="auto" width="100%" p={4} gap={4}>
-      {filteredChannelList.map((channel) => {
+      <Box
+        bgImage="url('/Rough-white-canvas4.jpg')"
+        bgSize="cover"
+        bgPosition="center"
+        borderRadius="md"
+        p={4}
+        mb={2}
+        boxShadow="md"
+      >
+        <Text
+          as="h2"
+          fontSize="xl"
+          fontWeight="bold"
+          color="gray.800"
+          letterSpacing="wider"
+        >
+          チャンネル一覧
+        </Text>
+      </Box>
+      {filteredChannelList.map((channel, idx) => {
         if (!channel.channelAdmin) return null;
 
         const isJoined = joinedChannels.includes(channel._id);
         const isBlocked = blockedChannels.includes(channel._id);
+
+        // デスクトップ時のみ幅80%、左右互い違い（偶数:右寄せ, 奇数:左寄せ）
+        const boxWidth = isMobile ? "100%" : "80%";
+        const boxMargin = isMobile
+          ? undefined
+          : idx % 2 === 0
+            ? { ml: "auto" }
+            : { mr: "auto" };
 
         return (
           <Box
             data-key={channel._id}
             onClick={() => handleChannelSelect(channel)}
             cursor="pointer"
-            bg={isJoined ? "green.100" : "white"}
             p={2}
-            w="100%"
-            borderRadius="lg"
+            w={boxWidth}
             key={channel._id}
             _hover={{
-              bg: isJoined ? "green.200" : "gray.200",
+              bg: "gray.200",
             }}
+            bgImage="url('/blank-map5.jpg')"
+            bgSize="cover"
+            bgPosition="center"
             boxShadow="uniform"
+            {...boxMargin}
           >
             <Flex justify="space-between" align="center" width="100%" gap={2}>
               <Avatar
@@ -104,7 +130,13 @@ const ChannelList = ({ showJoinedCh }) => {
 
               <Box textAlign="left" w="100%" overflow="hidden">
                 <EllipsisText mb={1}>
-                  タイトル： {channel.channelName}
+                  タイトル： {channel.channelName}{" "}
+                  {isJoined && (
+                    <FaCheck
+                      color="#38A169"
+                      style={{ display: "inline", marginLeft: 4 }}
+                    />
+                  )}
                 </EllipsisText>
                 <Divider borderWidth={1} borderColor="gray.700" mb={1} />
                 <EllipsisText mb={1}>

@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { Flex, Stack } from "@chakra-ui/react";
 
 import { useUserState } from "../../context/UserProvider.jsx";
-import ChannelList from "../../components/channelList/ChannelList.jsx";
+import ChannelList from "./MainContent/ChannelList/ChannelList.jsx";
 import { ChannelHeader } from "../../components/channels/ChannelHeader.jsx";
-import ChannelListSidebar from "../../components/channelList/ChannelListSidebar.jsx";
+// import ChannelListSidebar from "../../components/channelList/ChannelListSidebar.jsx";
 
 const Channel = lazy(() => import("../../components/channel/Channel.jsx"));
 const ChannelSidebar = lazy(
@@ -25,7 +25,6 @@ const Channels = () => {
   const navigate = useNavigate();
 
   const modeConfig = {
-    channelList: <ChannelListSidebar />,
     channel: <ChannelSidebar />,
     game: <GameSidebar />,
   };
@@ -57,16 +56,25 @@ const Channels = () => {
   if (!user.token) return null;
 
   return (
-    <Flex justifyContent="center" w="100%" h="100dvh" overflow="hidden">
+    <Flex
+      justifyContent="center"
+      w="100%"
+      h="100dvh"
+      overflow="hidden"
+      bgImage={!channelId ? "url('/cork-board2.jpg')" : undefined}
+      bgSize={!channelId ? "cover" : undefined}
+      bgPosition={!channelId ? "center" : undefined}
+      bgRepeat={!channelId ? "no-repeat" : undefined}
+    >
       {!isMobile && (
         <Suspense fallback={<div>Loading...</div>}>{modeConfig[mode]}</Suspense>
       )}
       <Stack alignItems="center" maxW="800px" overflow="hidden" w="100%">
-        <ChannelHeader
+        {/*         <ChannelHeader
           mode={mode}
           showJoinedCh={showJoinedCh}
           setShowJoinedCh={setShowJoinedCh}
-        />
+        /> */}
         <Suspense fallback={<div>Loading...</div>}>
           {channelId ? (
             <Channel key={channelId} />
