@@ -1,203 +1,203 @@
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-
 import {
-  Container,
   Box,
-  Image,
-  Button,
+  Flex,
   VStack,
+  Image,
   Text,
-  useColorModeValue,
-  Heading,
-  Icon,
-  Divider,
-  SimpleGrid,
-  Link as ChakraLink,
+  Button,
+  useBreakpointValue,
 } from "@chakra-ui/react";
-import { FaSignInAlt, FaUserPlus, FaGamepad } from "react-icons/fa";
-import { FaUsers, FaLock, FaXTwitter } from "react-icons/fa6";
 import { useUserState } from "../../context/UserProvider.jsx";
 import GuestLoginButton from "./GuestLoginButton.jsx";
+import { FaBook } from "react-icons/fa";
+
+const TITLE_LOGO = "/TITLE.webp"; // 必要に応じてパスを修正
+const DESCRIPTION =
+  "初めての方でも簡単に楽しめる人狼ゲーム。ゲストとしてすぐに始めたり、メンバー登録してより多くの機能を楽しんだりできます。";
+const BG_IMAGE = "/Village-entrance-pixel-art1.jpg";
 
 const Home = () => {
   const { uDispatch, chDispatch } = useUserState();
   const navigate = useNavigate();
-  const textColor = useColorModeValue("gray.600", "gray.400");
-  const cardBg = useColorModeValue("white", "gray.800");
-  const borderColor = useColorModeValue("gray.200", "gray.700");
-  const highlightColor = useColorModeValue("blue.500", "blue.300");
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   useEffect(() => {
     uDispatch({ type: "LOGOUT" });
     chDispatch({ type: "LEAVE_CHANNEL" });
   }, [uDispatch, chDispatch]);
 
-  const features = [
-    {
-      icon: FaGamepad,
-      title: "簡単に始められる",
-      description: "ゲストとしてすぐにプレイ可能",
-    },
-    {
-      icon: FaUsers,
-      title: "活発な交流",
-      description: "チャットで戦略を練り、推理を楽しむ",
-    },
-    {
-      icon: FaLock,
-      title: "充実した機能",
-      description: "役職の確認や投票など、便利な機能が満載",
-    },
-  ];
+  // 操作系ボタン群（横並び用）
+  const actionButtonsRow = (
+    <Flex gap={4}>
+      <GuestLoginButton h="60px" fontSize="lg" />
+      <Button
+        colorScheme="blue"
+        size="lg"
+        h="60px"
+        onClick={() => {
+          const userInfo = localStorage.getItem("userInfo");
+          if (userInfo) {
+            navigate("/chats");
+          } else {
+            navigate("/login");
+          }
+        }}
+      >
+        ログイン
+      </Button>
+      <Button
+        as={Link}
+        to="/send-registration-email"
+        colorScheme="blue"
+        variant="solid"
+        size="lg"
+        h="60px"
+      >
+        ユーザー登録
+      </Button>
+      <Button
+        as={Link}
+        to="/how-to-play"
+        colorScheme="blue"
+        variant="outline"
+        size="lg"
+        h="60px"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        gap={3}
+        _hover={{ transform: "translateY(-2px)", shadow: "md" }}
+        transition="all 0.2s"
+        leftIcon={<FaBook />}
+      >
+        あそびかた
+      </Button>
+    </Flex>
+  );
 
-  return (
-    <Box bg={useColorModeValue("gray.50", "gray.900")} minH="100vh">
-      <Container maxW="container.xl" py={10}>
-        <VStack spacing={12} align="stretch">
-          {/* ヘッダーセクション */}
-          <VStack spacing={8} align="center" textAlign="center">
-            <Image w="300px" h="63px" src="/TITLE.webp" alt="10人で人狼" />
-            <Heading
-              size="xl"
-              bgGradient="linear(to-r, blue.400, blue.600)"
-              bgClip="text"
-              fontWeight="bold"
-            >
-              人狼ゲームで遊ぼう
-            </Heading>
-            <Text fontSize="lg" color={textColor} maxW="2xl">
-              初めての方でも簡単に楽しめる人狼ゲーム。
-              ゲストとしてすぐに始めたり、メンバー登録してより多くの機能を楽しんだりできます。
-            </Text>
-          </VStack>
+  // タイトルロゴと説明文
+  const logoAndDesc = (
+    <VStack spacing={4} align={{ base: "center", md: "flex-start" }} w="100%">
+      <Image
+        src={TITLE_LOGO}
+        alt="タイトルロゴ"
+        w={{ base: "220px", md: "260px" }}
+      />
+      <Text fontSize={{ base: "md", md: "lg" }} color="gray.700" maxW="360px">
+        {DESCRIPTION}
+      </Text>
+    </VStack>
+  );
 
-          {/* 特徴セクション */}
-          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
-            {features.map((feature, index) => (
-              <Box
-                key={index}
-                p={6}
-                bg={cardBg}
-                rounded="xl"
-                shadow="md"
-                border="1px"
-                borderColor={borderColor}
-                textAlign="center"
-                _hover={{ transform: "translateY(-2px)", shadow: "lg" }}
-                transition="all 0.2s"
-              >
-                <Icon
-                  as={feature.icon}
-                  w={10}
-                  h={10}
-                  color={highlightColor}
-                  mb={4}
-                />
-                <Heading size="md" mb={2}>
-                  {feature.title}
-                </Heading>
-                <Text color={textColor}>{feature.description}</Text>
-              </Box>
-            ))}
-          </SimpleGrid>
-
-          {/* アクションセクション */}
-          <Box
-            p={8}
-            bg={cardBg}
-            rounded="xl"
-            shadow="md"
-            border="1px"
-            borderColor={borderColor}
-            textAlign="center"
+  if (isMobile) {
+    // モバイル表示: 縦並び
+    return (
+      <VStack minH="100vh" spacing={8} py={8} px={4} bg="gray.50">
+        <Image
+          src={BG_IMAGE}
+          alt="village entrance"
+          maxW="100%"
+          borderRadius="xl"
+          shadow="2xl"
+          objectFit="cover"
+        />
+        <Image src={TITLE_LOGO} alt="タイトルロゴ" w="220px" />
+        <Text fontSize="md" color="gray.700" textAlign="center">
+          {DESCRIPTION}
+        </Text>
+        <VStack spacing={6} w="100%">
+          <GuestLoginButton w="100%" h="60px" fontSize="lg" />
+          <Button
+            colorScheme="blue"
+            size="lg"
+            w="100%"
+            h="60px"
+            onClick={() => {
+              const userInfo = localStorage.getItem("userInfo");
+              if (userInfo) {
+                navigate("/chats");
+              } else {
+                navigate("/login");
+              }
+            }}
           >
-            <Heading size="md" mb={6} color={textColor}>
-              ゲームを始める
-            </Heading>
-            <VStack spacing={6} align="stretch" maxW="md" mx="auto">
-              <GuestLoginButton />
-
-              <Divider />
-
-              <Button
-                colorScheme="blue"
-                size="lg"
-                h="60px"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                gap={3}
-                _hover={{ transform: "translateY(-2px)", shadow: "md" }}
-                transition="all 0.2s"
-                onClick={() => {
-                  const userInfo = localStorage.getItem("userInfo");
-                  if (userInfo) {
-                    navigate("/chats");
-                  } else {
-                    navigate("/login");
-                  }
-                }}
-              >
-                <Icon as={FaSignInAlt} w={5} h={5} />
-                <Text>ログイン</Text>
-              </Button>
-
-              <Button
-                as={Link}
-                to="/send-registration-email"
-                colorScheme="blue"
-                variant="solid"
-                size="lg"
-                h="60px"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                gap={3}
-                _hover={{ transform: "translateY(-2px)", shadow: "md" }}
-                transition="all 0.2s"
-              >
-                <Icon as={FaUserPlus} w={5} h={5} />
-                <Text>ユーザー登録</Text>
-              </Button>
-            </VStack>
-          </Box>
-
-          {/* はじめかたセクション */}
-          <Box textAlign="center">
-            <Text color={textColor} mb={4}>
-              初めての方はこちら
-            </Text>
-            <Button
-              as={Link}
-              to="/how-to-play"
-              colorScheme="blue"
-              variant="outline"
-              size="lg"
-              leftIcon={<Icon as={FaGamepad} />}
-            >
-              はじめかたを見る
-            </Button>
-          </Box>
-
-          {/* ソーシャルリンクセクション */}
-          <Box textAlign="center" pt={4}>
-            <ChakraLink
-              href="https://x.com/Ukyo219206"
-              isExternal
-              display="inline-flex"
-              alignItems="center"
-              color={textColor}
-              _hover={{ color: "blue.500", textDecoration: "none" }}
-              transition="all 0.2s"
-            >
-              <Icon as={FaXTwitter} w={5} h={5} mr={2} />
-              <Text>Xでフォロー</Text>
-            </ChakraLink>
-          </Box>
+            ログイン
+          </Button>
+          <Button
+            as={Link}
+            to="/send-registration-email"
+            colorScheme="blue"
+            variant="solid"
+            size="lg"
+            w="100%"
+            h="60px"
+          >
+            ユーザー登録
+          </Button>
+          <Button
+            as={Link}
+            to="/how-to-play"
+            colorScheme="blue"
+            variant="outline"
+            size="lg"
+            w="100%"
+            h="60px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            gap={3}
+            _hover={{ transform: "translateY(-2px)", shadow: "md" }}
+            transition="all 0.2s"
+            leftIcon={<FaBook />}
+          >
+            あそびかた
+          </Button>
         </VStack>
-      </Container>
-    </Box>
+      </VStack>
+    );
+  }
+
+  // デスクトップ表示: タイトル・説明文を右上、ボタン群を下部中央に横並び
+  return (
+    <Flex
+      minH="100vh"
+      bgImage={`url(${BG_IMAGE})`}
+      bgSize="cover"
+      bgPosition="center"
+      bgRepeat="no-repeat"
+      position="relative"
+    >
+      {/* 右上: タイトル・説明文（オーバーレイ付き） */}
+      <Box
+        position="absolute"
+        top={8}
+        left="50%"
+        transform="translateX(-50%)"
+        bg="rgba(255,255,255,0.85)"
+        borderRadius="xl"
+        boxShadow="lg"
+        p={8}
+        maxW="400px"
+        zIndex={1}
+      >
+        {logoAndDesc}
+      </Box>
+      {/* 下部中央: ボタン群（横並び、オーバーレイ付き） */}
+      <Flex
+        position="absolute"
+        bottom={8}
+        left={0}
+        right={0}
+        justify="center"
+        zIndex={1}
+      >
+        <Box bg="rgba(255,255,255,0.85)" borderRadius="xl" boxShadow="lg" p={4}>
+          {actionButtonsRow}
+        </Box>
+      </Flex>
+    </Flex>
   );
 };
 

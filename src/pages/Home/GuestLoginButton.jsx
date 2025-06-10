@@ -58,7 +58,7 @@ const GuestLoginButton = () => {
       loadingText="ログイン中..."
     >
       <Icon as={FaUser} w={5} h={5} />
-      <Text>ゲストモードで始める</Text>
+      <Text>ゲストで始める</Text>
     </Button>
   );
 };

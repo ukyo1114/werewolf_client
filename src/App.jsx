@@ -5,11 +5,11 @@ import { Suspense, lazy } from "react";
 import Home from "./pages/Home/Home.jsx";
 import HowToPlay from "./pages/HowToPlay.jsx";
 import Login from "./pages/Login/Login.jsx";
-import Register from "./pages/Register.jsx";
+import RegisterUser from "./pages/RegisterUser/RegisterUser.jsx";
 import RequestPasswordReconfig from "./pages/PasswordReconfigure/RequestPasswordReconfig.jsx";
 import ReconfigPassword from "./pages/ReconfigPassword/ReconfigPassword.jsx";
 
-const Channels = lazy(() => import("./pages/Channels.jsx"));
+const Channels = lazy(() => import("./pages/Channels/Channels.jsx"));
 const SendRegistrationEmail = lazy(
   () => import("./pages/SendRegistrationEmail/SendRegistrationEmail.jsx")
 );
@@ -34,7 +34,7 @@ function App() {
           path="/request-password-reconfig"
           element={<RequestPasswordReconfig />}
         />
-        <Route path="/register/:token" element={<Register />} />
+        <Route path="/register/:token" element={<RegisterUser />} />
       </Routes>
     </Suspense>
   );

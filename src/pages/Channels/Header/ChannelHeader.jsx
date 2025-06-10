@@ -1,15 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import { Flex, Button, useDisclosure } from "@chakra-ui/react";
-import { useUserState } from "../../context/UserProvider.jsx";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import UserList from "../miscellaneous/UserList.jsx";
-import ModalTemplete from "../miscellaneous/ModalTemplete.jsx";
-import { EllipsisText } from "../miscellaneous/CustomComponents.jsx";
-import useNotification from "../../hooks/useNotification";
-import useJoinGame from "../../hooks/useJoinGame";
+import UserList from "../../../components/miscellaneous/UserList.jsx";
+import ModalTemplete from "../../../components/miscellaneous/ModalTemplete.jsx";
+import { EllipsisText } from "../../../components/miscellaneous/CustomComponents.jsx";
+import useNotification from "../../../hooks/useNotification";
+import useJoinGame from "../../../hooks/useJoinGame";
+import { useUserState } from "../../../context/UserProvider.jsx";
 
-const EntryCounter = () => {
+const ChannelHeader = () => {
   const { user, currentChannel } = useUserState();
   const [users, setUsers] = useState([]);
   const [entryButtonState, setEntryButtonState] = useState(false);
@@ -126,4 +126,4 @@ const EntryCounter = () => {
   );
 };
 
-export default EntryCounter;
+export default ChannelHeader;
