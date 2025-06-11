@@ -13,6 +13,9 @@ const Channels = lazy(() => import("./pages/Channels/Channels.jsx"));
 const SendRegistrationEmail = lazy(
   () => import("./pages/SendRegistrationEmail/SendRegistrationEmail.jsx")
 );
+const ChannelList = lazy(
+  () => import("./pages/ChannelList/components/ChannelList.jsx")
+);
 
 function App() {
   return (
@@ -35,6 +38,7 @@ function App() {
           element={<RequestPasswordReconfig />}
         />
         <Route path="/register/:token" element={<RegisterUser />} />
+        <Route path="/channel-list" element={<ChannelList />} />
       </Routes>
     </Suspense>
   );

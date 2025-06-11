@@ -5,7 +5,7 @@ import { Flex, Stack } from "@chakra-ui/react";
 
 import { useUserState } from "../../context/UserProvider.jsx";
 import ChannelList from "./MainContent/ChannelList/ChannelList.jsx";
-import { ChannelHeader } from "../../components/channels/ChannelHeader.jsx";
+// import { ChannelHeader } from "../../components/channels/ChannelHeader.jsx";
 // import ChannelListSidebar from "../../components/channelList/ChannelListSidebar.jsx";
 
 const Channel = lazy(() => import("../../components/channel/Channel.jsx"));
