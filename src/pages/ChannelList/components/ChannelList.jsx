@@ -21,7 +21,7 @@ import Header from "./Header";
 // Internal hooks
 import { useUserState } from "../../../context/UserProvider";
 import { useAuthCheck } from "../../../commonHooks/useAuthCheck";
-// import ChannelInfo from "./ChannelInfo";
+import ChannelInfo from "./ChannelInfo";
 import useFetchChannelList from "../hooks/useFetchChannelList";
 
 const ChannelList = () => {
@@ -75,7 +75,13 @@ const ChannelList = () => {
       bgPosition="center"
       bgRepeat="no-repeat"
     >
-      <Stack alignItems="center" maxW="container.lg" overflow="hidden" w="100%">
+      <Stack
+        alignItems="center"
+        maxW="container.lg"
+        overflow="hidden"
+        w="100%"
+        mx={isMobile ? 2 : 4}
+      >
         <Header showJoinedCh={showJoinedCh} setShowJoinedCh={setShowJoinedCh} />
         {filteredChannelList.map((channel, idx) => {
           if (!channel.channelAdmin) return null;
@@ -100,12 +106,14 @@ const ChannelList = () => {
               w={boxWidth}
               key={channel._id}
               _hover={{
-                bg: "gray.200",
+                filter: "brightness(1.08) saturate(1.2)",
+                transform: "translateY(-2px)",
+                boxShadow: "lg",
               }}
               bgImage="url('/blank-map5.jpg')"
               bgSize="cover"
               bgPosition="center"
-              boxShadow="uniform"
+              boxShadow="md"
               {...boxMargin}
             >
               <Flex justify="space-between" align="center" width="100%" gap={2}>
@@ -152,7 +160,7 @@ const ChannelList = () => {
             onClose={channelInfo.onClose}
             title={"チャンネル情報"}
           >
-            {/* <ChannelInfo selectedChannel={selectedChannel} /> */}
+            <ChannelInfo selectedChannel={selectedChannel} />
           </ModalTemplete>
         )}
       </Stack>

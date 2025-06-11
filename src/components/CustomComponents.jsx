@@ -63,6 +63,27 @@ export const SidebarButton = ({ label, children, ...props }) => {
   );
 };
 
+export const CustomButton = ({ children, ...props }) => (
+  <Button
+    {...props}
+    colorScheme="blue"
+    variant="outline"
+    borderWidth="2px"
+    size="lg"
+    boxShadow="md"
+    bg="rgba(255,255,255,0.3)"
+    backdropFilter="blur(8px)"
+    _hover={{
+      transform: "translateY(-2px)",
+      shadow: "md",
+      boxShadow: "lg",
+    }}
+    transition="all 0.2s"
+  >
+    {children}
+  </Button>
+);
+
 export const SelectableBox = ({ children, ...props }) => (
   <Flex
     alignItems="center"
@@ -90,4 +111,10 @@ export const EllipsisText = ({ children, ...props }) => (
 export const iconProps = {
   size: "30px",
   color: "#4A5568",
+};
+
+export const formProps = {
+  borderColor: "gray.500",
+  borderWidth: "2px",
+  bg: "whiteAlpha.900",
 };
