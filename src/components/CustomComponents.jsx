@@ -48,18 +48,24 @@ export const SidebarButton = ({ label, children, ...props }) => {
   const { isMobile } = useUserState();
 
   return (
-    <Tooltip label={label} placement="bottom-end">
-      <Button variant="ghost" my={2} {...props}>
-        {children}
-        <Text
-          color="gray.700"
-          display={isMobile ? "flex" : { base: "none", lg: "flex" }}
-          ml={3}
-        >
-          {label}
-        </Text>
-      </Button>
-    </Tooltip>
+    <Button
+      colorScheme="blue"
+      variant={isMobile ? "outline" : { base: "ghost", lg: "outline" }}
+      borderWidth={isMobile ? "1px" : { lg: "1px" }}
+      boxShadow={isMobile ? "md" : { lg: "md" }}
+      bg={isMobile ? "rgba(255,255,255,0.3)" : { lg: "rgba(255,255,255,0.3)" }}
+      backdropFilter={isMobile ? "blur(8px)" : { lg: "blur(8px)" }}
+      _hover={{
+        transform: "translateY(-2px)",
+        boxShadow: "lg",
+      }}
+      {...props}
+    >
+      {children}
+      <Text display={isMobile ? "flex" : { base: "none", lg: "flex" }} ml={3}>
+        {label}
+      </Text>
+    </Button>
   );
 };
 
@@ -68,17 +74,15 @@ export const CustomButton = ({ children, ...props }) => (
     {...props}
     colorScheme="blue"
     variant="outline"
-    borderWidth="2px"
+    borderWidth="1px"
     size="lg"
     boxShadow="md"
     bg="rgba(255,255,255,0.3)"
     backdropFilter="blur(8px)"
     _hover={{
       transform: "translateY(-2px)",
-      shadow: "md",
       boxShadow: "lg",
     }}
-    transition="all 0.2s"
   >
     {children}
   </Button>
@@ -109,8 +113,7 @@ export const EllipsisText = ({ children, ...props }) => (
 );
 
 export const iconProps = {
-  size: "30px",
-  color: "#4A5568",
+  size: "28px",
 };
 
 export const formProps = {

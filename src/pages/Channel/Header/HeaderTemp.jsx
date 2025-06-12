@@ -15,16 +15,12 @@ import {
   CustomButton,
 } from "../../../components/CustomComponents";
 import ModalTemplete from "../../../components/ModalTemplete";
-import CreateChannel from "./CreateChannel";
 import { useState } from "react";
 import { useUserState } from "../../../context/UserProvider";
 import { FaBars } from "react-icons/fa";
-import { FaRegPlusSquare } from "react-icons/fa";
 
-const Header = ({ showJoinedCh, setShowJoinedCh }) => {
+const Header = ({ children, title }) => {
   const { isMobile } = useUserState();
-  const [isOpen, setIsOpen] = useState(false);
-  const onClose = () => setIsOpen(false);
 
   return (
     <Box
@@ -34,7 +30,6 @@ const Header = ({ showJoinedCh, setShowJoinedCh }) => {
       borderRadius="md"
       border="4px solid #ccc"
       p={4}
-      my={4}
       boxShadow="lg"
       w="100%"
     >
@@ -46,19 +41,11 @@ const Header = ({ showJoinedCh, setShowJoinedCh }) => {
           color="gray.800"
           letterSpacing="wider"
         >
-          チャンネル一覧
+          {title}
         </Text>
         <Flex gap={4} align="center">
-          <Checkbox
-            id="isJoined"
-            isChecked={showJoinedCh}
-            onChange={(e) => setShowJoinedCh(e.target.checked)}
-            borderColor="gray.500"
-            _hover={{ borderColor: "gray.600" }}
-          >
-            <EllipsisText>参加中のみ</EllipsisText>
-          </Checkbox>
-          {isMobile ? (
+          {children}
+          {isMobile && (
             <Menu>
               <MenuButton
                 as={IconButton}
@@ -66,25 +53,11 @@ const Header = ({ showJoinedCh, setShowJoinedCh }) => {
                 variant="ghost"
                 size="sm"
               />
-              <MenuList>
-                <MenuItem onClick={() => setIsOpen(true)}>
-                  チャンネル作成
-                </MenuItem>
-              </MenuList>
+              <MenuList></MenuList>
             </Menu>
-          ) : (
-            <CustomButton
-              onClick={() => setIsOpen(true)}
-              leftIcon={<FaRegPlusSquare />}
-            >
-              チャンネル作成
-            </CustomButton>
           )}
         </Flex>
       </Flex>
-      <ModalTemplete title="チャンネル作成" isOpen={isOpen} onClose={onClose}>
-        <CreateChannel onClose={onClose} />
-      </ModalTemplete>
     </Box>
   );
 };

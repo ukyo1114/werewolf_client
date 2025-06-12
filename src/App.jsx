@@ -9,7 +9,7 @@ import RegisterUser from "./pages/RegisterUser/RegisterUser.jsx";
 import RequestPasswordReconfig from "./pages/PasswordReconfigure/RequestPasswordReconfig.jsx";
 import ReconfigPassword from "./pages/ReconfigPassword/ReconfigPassword.jsx";
 
-const Channels = lazy(() => import("./pages/Channels/Channels.jsx"));
+const Channel = lazy(() => import("./pages/Channel/components/Channel.jsx"));
 const SendRegistrationEmail = lazy(
   () => import("./pages/SendRegistrationEmail/SendRegistrationEmail.jsx")
 );
@@ -23,7 +23,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/how-to-play" element={<HowToPlay />} />
-        <Route path="/chats" element={<Channels />} />
+        <Route path="/channel" element={<Channel />} />
         <Route
           path="/reconfig-password/:token"
           element={<ReconfigPassword />}

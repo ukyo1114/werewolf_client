@@ -27,6 +27,7 @@ import {
   formProps,
 } from "../../../components//CustomComponents.jsx";
 import { FaTimesCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   channelName: "",
@@ -43,7 +44,7 @@ const CreateChannel = ({ onClose }) => {
   const [values, setValues] = useState(initialState);
   const [errorsState, setErrorsState] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const navigate = useNavigate();
   const validate = (vals) => {
     const errs = {};
     if (!vals.channelName || vals.channelName.length < 2) {
@@ -101,9 +102,7 @@ const CreateChannel = ({ onClose }) => {
       } = await axios.post("/api/channel/create", payload, config);
       showToast(messages.CHANNEL_CREATED, "success");
       chDispatch({ type: "JOIN_CHANNEL", payload: channel });
-      setIsSubmitting(false);
-      if (onClose) onClose();
-      setValues(initialState);
+      navigate("/channel");
     } catch (error) {
       const errorMessage =
         error?.response?.data?.error || errors.CHANNEL_CREATION_FAILED;

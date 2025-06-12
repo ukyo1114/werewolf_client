@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import SidebarTemp from "../SidebarTemp.jsx";
 import { useDisclosure } from "@chakra-ui/react";
 
 import {
@@ -12,20 +12,19 @@ import {
   FaInfoCircle,
 } from "react-icons/fa";
 
-import { useUserState } from "../../context/UserProvider.jsx";
-import UserList from "../miscellaneous/UserList.jsx";
-import BlockModal from "./BlockModal.jsx";
-import ChannelSettingsModal from "./ChannelSettingsModal.jsx";
-import useNotification from "../../hooks/useNotification";
-import ModalTemplete from "../miscellaneous/ModalTemplete.jsx";
+import { useUserState } from "../../../../context/UserProvider.jsx";
+// import UserList from "../miscellaneous/UserList.jsx";
+// import BlockModal from "./BlockModal.jsx";
+// import ChannelSettingsModal from "./ChannelSettingsModal.jsx";
+import useNotification from "../../../../commonHooks/useNotification";
+import ModalTemplete from "../../../../components/ModalTemplete.jsx";
 import {
   SidebarButton,
   iconProps,
-} from "../miscellaneous/CustomComponents.jsx";
-import { SideBar } from "../miscellaneous/SideBar.jsx";
-import SpectatorModal from "./spectate/SpectatorModal.jsx";
-import { DisplayChDescription } from "../miscellaneous/DisplayChDescription.jsx";
-import { messages } from "../../messages.js";
+} from "../../../../components/CustomComponents.jsx";
+// import SpectatorModal from "./spectate/SpectatorModal.jsx";
+// import { DisplayChDescription } from "../miscellaneous/DisplayChDescription.jsx";
+import { messages } from "../../../../messages.js";
 
 const ChannelSidebar = () => {
   const { user, currentChannel, chDispatch } = useUserState();
@@ -52,75 +51,77 @@ const ChannelSidebar = () => {
   };
 
   return (
-    <SideBar>
-      <SidebarButton label="チャンネル情報" onClick={chDescription.onOpen}>
-        <FaInfoCircle {...iconProps} />
-      </SidebarButton>
-
-      <SidebarButton label="ユーザーリスト" onClick={userListModal.onOpen}>
-        <FaUsers {...iconProps} />
-      </SidebarButton>
-
-      <SidebarButton label="観戦" onClick={spectator.onOpen}>
-        <FaBinoculars {...iconProps} />
-      </SidebarButton>
+    <SidebarTemp>
+      <SidebarButton
+        label="チャンネル情報"
+        onClick={chDescription.onOpen}
+        leftIcon={<FaInfoCircle {...iconProps} />}
+      ></SidebarButton>
 
       <SidebarButton
-        label="チャンネル一覧"
+        label="ユーザーリスト"
+        onClick={userListModal.onOpen}
+        leftIcon={<FaUsers {...iconProps} />}
+      ></SidebarButton>
+
+      <SidebarButton
+        label="観戦"
+        onClick={spectator.onOpen}
+        leftIcon={<FaBinoculars {...iconProps} />}
+      ></SidebarButton>
+
+      <SidebarButton
+        label="戻る"
         onClick={() => chDispatch({ type: "LEAVE_CHANNEL" })}
-      >
-        <FaArrowLeft {...iconProps} />
-      </SidebarButton>
+        leftIcon={<FaArrowLeft {...iconProps} />}
+      ></SidebarButton>
 
       <SidebarButton
-        label="チャンネルを抜ける"
+        label="退出"
         onClick={() => leaveChannel()}
         isDisabled={isAdmin}
-      >
-        <FaSignOutAlt {...iconProps} />
-      </SidebarButton>
+        leftIcon={<FaSignOutAlt {...iconProps} />}
+      ></SidebarButton>
 
       <SidebarButton
         label="ブロック/解除"
         onClick={blockModal.onOpen}
         isDisabled={!isAdmin}
-      >
-        <FaUserSlash {...iconProps} />
-      </SidebarButton>
+        leftIcon={<FaUserSlash {...iconProps} />}
+      ></SidebarButton>
 
       <SidebarButton
         label="チャンネル設定"
         onClick={chSettingsModal.onOpen}
         isDisabled={!isAdmin}
-      >
-        <FaCog {...iconProps} />
-      </SidebarButton>
+        leftIcon={<FaCog {...iconProps} />}
+      ></SidebarButton>
 
-      <ModalTemplete
+      {/*       <ModalTemplete
         isOpen={chDescription.isOpen}
         onClose={chDescription.onClose}
         title={"チャンネル情報"}
       >
         <DisplayChDescription />
-      </ModalTemplete>
+      </ModalTemplete> */}
 
-      <ModalTemplete
+      {/*       <ModalTemplete
         isOpen={userListModal.isOpen}
         onClose={userListModal.onClose}
         title={"ユーザーリスト"}
       >
         <UserList userList={users} />
-      </ModalTemplete>
+      </ModalTemplete> */}
 
-      <ModalTemplete
+      {/*       <ModalTemplete
         isOpen={spectator.isOpen}
         onClose={spectator.onClose}
         title={"ゲームリスト"}
       >
         <SpectatorModal />
-      </ModalTemplete>
+      </ModalTemplete> */}
 
-      {isAdmin && (
+      {/*       {isAdmin && (
         <ModalTemplete
           isOpen={blockModal.isOpen}
           onClose={blockModal.onClose}
@@ -128,9 +129,9 @@ const ChannelSidebar = () => {
         >
           <BlockModal />
         </ModalTemplete>
-      )}
+      )} */}
 
-      {isAdmin && (
+      {/*       {isAdmin && (
         <ModalTemplete
           isOpen={chSettingsModal.isOpen}
           onClose={chSettingsModal.onClose}
@@ -138,8 +139,8 @@ const ChannelSidebar = () => {
         >
           <ChannelSettingsModal />
         </ModalTemplete>
-      )}
-    </SideBar>
+      )} */}
+    </SidebarTemp>
   );
 };
 

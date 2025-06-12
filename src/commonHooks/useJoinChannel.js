@@ -31,7 +31,7 @@ export const useJoinChannel = () => {
         };
 
         chDispatch({ type: "JOIN_CHANNEL", payload: channel });
-        navigate("/chats");
+        navigate("/channel");
       } catch (error) {
         showToast(
           error?.response?.data?.error || errors.CHANNEL_ENTER_FAILED,

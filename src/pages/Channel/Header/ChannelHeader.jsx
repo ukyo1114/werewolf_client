@@ -8,6 +8,7 @@ import { EllipsisText } from "../../../components/miscellaneous/CustomComponents
 import useNotification from "../../../hooks/useNotification";
 import useJoinGame from "../../../hooks/useJoinGame";
 import { useUserState } from "../../../context/UserProvider.jsx";
+import HeaderTemp from "./HeaderTemp.jsx";
 
 const ChannelHeader = () => {
   const { user, currentChannel } = useUserState();
@@ -57,11 +58,7 @@ const ChannelHeader = () => {
   }, [users, user.userId, setEntryButtonState]);
 
   return (
-    <>
-      <EllipsisText fontSize="lg" fontWeight="bold" color="gray.700">
-        {channelName}
-      </EllipsisText>
-
+    <HeaderTemp title={channelName}>
       <Flex alignItems="center">
         <EllipsisText
           fontSize="lg"
@@ -81,7 +78,16 @@ const ChannelHeader = () => {
 
         <Button
           data-testid="entry-button" // テスト用
-          colorScheme={entryButtonState ? "pink" : "teal"}
+          colorScheme={entryButtonState ? "pink" : "blue"}
+          borderWidth="1px"
+          variant="outline"
+          boxShadow="md"
+          bg="rgba(255,255,255,0.3)"
+          backdropFilter="blur(8px)"
+          _hover={{
+            transform: "translateY(-2px)",
+            boxShadow: "lg",
+          }}
           onClick={() => {
             if (entryButtonState) {
               entrySocketRef.current.emit("cancelEntry", (response) => {
@@ -122,7 +128,7 @@ const ChannelHeader = () => {
           />
         </ModalTemplete>
       )}
-    </>
+    </HeaderTemp>
   );
 };
 
