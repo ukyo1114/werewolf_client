@@ -81,7 +81,7 @@ const RegisterUser = () => {
           pic: null,
         })
       );
-      navigate("/chats");
+      navigate("/channel-list");
     } catch (error) {
       showToast(error.response?.data?.message || "登録に失敗しました", "error");
     } finally {

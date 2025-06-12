@@ -80,7 +80,7 @@ const Home = () => {
           <GuestLoginButton w="100%" h="60px" fontSize="lg" />
           <Button
             as={Link}
-            to={localStorage.getItem("userInfo") ? "/chats" : "/login"}
+            to={localStorage.getItem("userInfo") ? "/channel-list" : "/login"}
             colorScheme="blue"
             variant="outline"
             size="lg"
@@ -196,7 +196,7 @@ const Home = () => {
             <GuestLoginButton h="60px" fontSize="lg" />
             <Button
               as={Link}
-              to={localStorage.getItem("userInfo") ? "/chats" : "/login"}
+              to={localStorage.getItem("userInfo") ? "/channel-list" : "/login"}
               colorScheme="blue"
               variant="outline"
               size="lg"

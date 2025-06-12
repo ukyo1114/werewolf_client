@@ -13,7 +13,7 @@ const GuestLoginButton = () => {
   const handleGuestLogin = async () => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     if (userInfo && userInfo.isGuest) {
-      navigate("/chats");
+      navigate("/channel-list");
       return;
     }
 
@@ -29,7 +29,7 @@ const GuestLoginButton = () => {
           isGuest: true,
         })
       );
-      navigate("/chats");
+      navigate("/channel-list");
     } catch (error) {
       showToast(
         error.response?.data?.message ||

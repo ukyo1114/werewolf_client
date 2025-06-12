@@ -36,7 +36,7 @@ const Login = () => {
 
   useEffect(() => {
     if (localStorage.getItem("userInfo")) {
-      navigate("/chats");
+      navigate("/channel-list");
     } else {
       uDispatch({ type: "LOGOUT" });
       chDispatch({ type: "LEAVE_CHANNEL" });
@@ -52,7 +52,7 @@ const Login = () => {
         password,
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
-      navigate("/chats");
+      navigate("/channel-list");
     } catch (error) {
       showToast(
         error.response?.data?.message || "ログインに失敗しました",
@@ -76,7 +76,7 @@ const Login = () => {
           isGuest: true,
         })
       );
-      navigate("/chats");
+      navigate("/channel-list");
     } catch (error) {
       showToast(
         error.response?.data?.message ||

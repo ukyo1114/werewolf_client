@@ -2,12 +2,13 @@ import { useCallback } from "react";
 import axios from "axios";
 import { useUserState } from "../context/UserProvider.jsx";
 import useNotification from "./useNotification";
-import { errors, messages } from "../messages";
+import { errors } from "../messages";
+import { useNavigate } from "react-router-dom";
 
 export const useJoinChannel = () => {
   const { user, chDispatch } = useUserState();
   const showToast = useNotification();
-
+  const navigate = useNavigate();
   const joinChannel = useCallback(
     async (channelId, password) => {
       try {
@@ -30,7 +31,7 @@ export const useJoinChannel = () => {
         };
 
         chDispatch({ type: "JOIN_CHANNEL", payload: channel });
-        showToast(messages.CHANNEL_JOINED, "success");
+        navigate("/chats");
       } catch (error) {
         showToast(
           error?.response?.data?.error || errors.CHANNEL_ENTER_FAILED,
@@ -38,7 +39,7 @@ export const useJoinChannel = () => {
         );
       }
     },
-    [user.token, chDispatch, showToast]
+    [user.token, chDispatch, showToast, navigate]
   );
 
   return joinChannel;

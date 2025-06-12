@@ -118,10 +118,10 @@ const CreateChannel = ({ onClose }) => {
         onSubmit={handleSubmit}
         style={{ display: "flex", flexDirection: "column", overflow: "auto" }}
       >
-        <Box mb={4}>
+        <Box mb={6}>
           <FormControl
             id="channelName"
-            mb={3}
+            mb={5}
             isInvalid={!!errorsState.channelName}
           >
             <FormLabel fontWeight="bold">
@@ -149,7 +149,7 @@ const CreateChannel = ({ onClose }) => {
 
           <FormControl
             id="description"
-            mb={3}
+            mb={5}
             isInvalid={!!errorsState.description}
           >
             <FormLabel fontWeight="bold">
@@ -178,12 +178,12 @@ const CreateChannel = ({ onClose }) => {
           </FormControl>
         </Box>
 
-        <Divider my={4} borderColor="gray.500" />
+        <Divider my={6} borderColor="gray.500" />
 
-        <Box mb={4}>
+        <Box mb={6}>
           <FormControl
             id="numberOfPlayers"
-            mb={4}
+            mb={5}
             isInvalid={!!errorsState.numberOfPlayers}
           >
             <FormLabel fontWeight="bold">
@@ -214,12 +214,12 @@ const CreateChannel = ({ onClose }) => {
 
           <FormControl
             id="denyGuests"
-            mb={4}
+            mb={5}
             display="flex"
             alignItems="center"
           >
             <FormLabel mb="0" fontWeight="bold">
-              <EllipsisText>ゲストユーザーの入室を禁止</EllipsisText>
+              <EllipsisText>ゲスト入室不可</EllipsisText>
             </FormLabel>
             <Switch
               name="denyGuests"
@@ -231,10 +231,10 @@ const CreateChannel = ({ onClose }) => {
           </FormControl>
         </Box>
 
-        <Divider my={4} borderColor="gray.500" />
+        <Divider my={6} borderColor="gray.500" />
 
-        <Box mb={4}>
-          <FormControl id="isPasswordEnabled" mb={3}>
+        <Box mb={6}>
+          <FormControl id="isPasswordEnabled" mb={5}>
             <Checkbox
               name="isPasswordEnabled"
               isChecked={values.isPasswordEnabled}
@@ -250,7 +250,7 @@ const CreateChannel = ({ onClose }) => {
           {values.isPasswordEnabled && (
             <FormControl
               id="password"
-              mb={3}
+              mb={5}
               isInvalid={!!errorsState.password}
             >
               <Input
@@ -278,11 +278,7 @@ const CreateChannel = ({ onClose }) => {
           )}
         </Box>
 
-        <CustomButton
-          type="submit"
-          isLoading={isSubmitting}
-          alignSelf="flex-end"
-        >
+        <CustomButton type="submit" isLoading={isSubmitting} mt={6}>
           作成
         </CustomButton>
       </form>

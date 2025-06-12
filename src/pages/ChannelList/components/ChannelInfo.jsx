@@ -24,8 +24,8 @@ const ChannelInfo = ({ selectedChannel }) => {
   const { isBlocked, isJoined } = selectedChannel;
 
   return (
-    <Stack spacing={4} overflow="hidden">
-      <Box>
+    <Stack spacing={6} overflow="hidden" maxW="400px" w="100%" mx="auto">
+      <Box mb={2}>
         <Text fontSize="xl" fontWeight="bold" textAlign="center">
           {selectedChannel.channelName}
         </Text>
@@ -43,27 +43,34 @@ const ChannelInfo = ({ selectedChannel }) => {
         </Flex>
       </Box>
 
-      <Divider borderColor="gray.500" />
+      <Divider my={4} borderColor="gray.500" />
 
-      <Box>
+      <Box mb={2}>
         <Text fontWeight="bold" mb={2}>
           説明
         </Text>
-        <Text overflow="auto" whiteSpace="pre-wrap">
+        <Text
+          overflow="auto"
+          whiteSpace="pre-wrap"
+          bg="gray.50"
+          p={3}
+          borderRadius="md"
+          color="gray.800"
+        >
           {selectedChannel.channelDescription}
         </Text>
       </Box>
 
-      <Divider borderColor="gray.500" />
+      <Divider my={4} borderColor="gray.500" />
 
-      <Flex>
+      <Flex mb={2}>
         <Text fontWeight="bold" mr={2}>
           作成者:
         </Text>
         <Text color="gray.600">{selectedChannel.channelAdmin.userName}</Text>
       </Flex>
 
-      <Flex>
+      <Flex mb={2}>
         <Text fontWeight="bold" mr={2}>
           プレイ人数:
         </Text>
@@ -73,7 +80,7 @@ const ChannelInfo = ({ selectedChannel }) => {
       {selectedChannel.passwordEnabled && !isJoined && (
         <>
           <Divider my={4} borderColor="gray.500" />
-          <FormControl id="password">
+          <FormControl mb={4} id="password">
             <FormLabel fontWeight="bold">パスワード</FormLabel>
             <Input
               placeholder="パスワードを入力してください"
@@ -91,6 +98,7 @@ const ChannelInfo = ({ selectedChannel }) => {
         colorScheme={isBlocked ? "pink" : "teal"}
         onClick={() => joinChannel(selectedChannel._id, password)}
         isDisabled={isBlocked || (user.isGuest && selectedChannel.denyGuests)}
+        mt={2}
       >
         {isBlocked
           ? "ブロックされています"
