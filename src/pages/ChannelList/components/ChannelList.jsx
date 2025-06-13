@@ -21,7 +21,10 @@ import {
 
 // Internal components
 import ModalTemplete from "../../../components/ModalTemplete";
-import { EllipsisText } from "../../../components/miscellaneous/CustomComponents";
+import {
+  EllipsisText,
+  shadowProps,
+} from "../../../components/CustomComponents";
 import Header from "./Header";
 
 // Internal hooks
@@ -141,7 +144,7 @@ const ChannelList = () => {
                       w={boxWidth}
                       key={channel._id}
                       borderRadius="lg"
-                      boxShadow="lg"
+                      {...shadowProps}
                       _hover={{
                         filter: "brightness(1.08) saturate(1.2)",
                         transform: "translateY(-2px)",

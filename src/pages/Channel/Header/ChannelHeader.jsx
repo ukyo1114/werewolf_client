@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
-import { Flex, Button, useDisclosure } from "@chakra-ui/react";
+import { Flex, Button, useDisclosure, Text } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import UserList from "../../../components/miscellaneous/UserList.jsx";
-import ModalTemplete from "../../../components/miscellaneous/ModalTemplete.jsx";
-import { EllipsisText } from "../../../components/miscellaneous/CustomComponents.jsx";
+import UserList from "../../../components/UserList.jsx";
+import ModalTemplete from "../../../components/ModalTemplete.jsx";
+import { EllipsisText } from "../../../components/CustomComponents.jsx";
 import useNotification from "../../../hooks/useNotification";
 import useJoinGame from "../../../hooks/useJoinGame";
 import { useUserState } from "../../../context/UserProvider.jsx";
 import HeaderTemp from "./HeaderTemp.jsx";
 
 const ChannelHeader = () => {
-  const { user, currentChannel } = useUserState();
+  const { user, currentChannel, isMobile } = useUserState();
   const [users, setUsers] = useState([]);
   const [entryButtonState, setEntryButtonState] = useState(false);
   const showToast = useNotification();
@@ -59,6 +59,16 @@ const ChannelHeader = () => {
 
   return (
     <HeaderTemp title={channelName}>
+      <Text
+        as="h2"
+        fontSize={isMobile ? "xl" : "2xl"}
+        fontWeight="bold"
+        color="gray.800"
+        letterSpacing="wider"
+      >
+        {channelName}
+      </Text>
+
       <Flex alignItems="center">
         <EllipsisText
           fontSize="lg"
@@ -70,9 +80,15 @@ const ChannelHeader = () => {
           mr={2}
           py="5px"
           borderRadius="md"
-          _hover={{ bg: "gray.200" }}
+          border="1px solid"
+          backdropFilter="blur(1px)"
+          _hover={{
+            transform: "translateY(-2px)",
+            boxShadow: "lg",
+          }}
+          boxShadow="md"
         >
-          {users.length}/10人
+          {users.length}/{currentChannel.numberOfPlayers}人
           <ChevronDownIcon ml={1} />
         </EllipsisText>
 
@@ -83,7 +99,7 @@ const ChannelHeader = () => {
           variant="outline"
           boxShadow="md"
           bg="rgba(255,255,255,0.3)"
-          backdropFilter="blur(8px)"
+          backdropFilter="blur(1px)"
           _hover={{
             transform: "translateY(-2px)",
             boxShadow: "lg",

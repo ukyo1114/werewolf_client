@@ -13,6 +13,7 @@ import {
 import {
   EllipsisText,
   CustomButton,
+  shadowProps,
 } from "../../../components/CustomComponents";
 import ModalTemplete from "../../../components/ModalTemplete";
 import { useState } from "react";
@@ -28,35 +29,26 @@ const Header = ({ children, title }) => {
       bgSize="cover"
       bgPosition="center"
       borderRadius="md"
-      border="4px solid #ccc"
+      border="4px solid #b0b0b0"
       p={4}
-      boxShadow="lg"
+      {...shadowProps}
       w="100%"
     >
-      <Flex justify="space-between" align="center">
-        <Text
-          as="h2"
-          fontSize={isMobile ? "xl" : "2xl"}
-          fontWeight="bold"
-          color="gray.800"
-          letterSpacing="wider"
-        >
-          {title}
-        </Text>
-        <Flex gap={4} align="center">
+      <Flex align="center" gap={4}>
+        <Flex justify="space-between" align="center" flex={1}>
           {children}
-          {isMobile && (
-            <Menu>
-              <MenuButton
-                as={IconButton}
-                icon={<FaBars />}
-                variant="ghost"
-                size="sm"
-              />
-              <MenuList></MenuList>
-            </Menu>
-          )}
         </Flex>
+        {isMobile && (
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              icon={<FaBars />}
+              variant="ghost"
+              size="sm"
+            />
+            <MenuList></MenuList>
+          </Menu>
+        )}
       </Flex>
     </Box>
   );

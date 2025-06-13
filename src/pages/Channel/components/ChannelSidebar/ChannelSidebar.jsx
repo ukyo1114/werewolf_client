@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 
 import { useUserState } from "../../../../context/UserProvider.jsx";
-// import UserList from "../miscellaneous/UserList.jsx";
+import UserList from "../../../../components/UserList.jsx";
 // import BlockModal from "./BlockModal.jsx";
 // import ChannelSettingsModal from "./ChannelSettingsModal.jsx";
 import useNotification from "../../../../commonHooks/useNotification";
@@ -22,8 +22,8 @@ import {
   SidebarButton,
   iconProps,
 } from "../../../../components/CustomComponents.jsx";
-// import SpectatorModal from "./spectate/SpectatorModal.jsx";
-// import { DisplayChDescription } from "../miscellaneous/DisplayChDescription.jsx";
+import SpectatorModal from "./SpectatorModal.jsx";
+import { DisplayChDescription } from "../../../../components/DisplayChDescription.jsx";
 import { messages } from "../../../../messages.js";
 
 const ChannelSidebar = () => {
@@ -97,29 +97,29 @@ const ChannelSidebar = () => {
         leftIcon={<FaCog {...iconProps} />}
       ></SidebarButton>
 
-      {/*       <ModalTemplete
+      <ModalTemplete
         isOpen={chDescription.isOpen}
         onClose={chDescription.onClose}
         title={"チャンネル情報"}
       >
         <DisplayChDescription />
-      </ModalTemplete> */}
+      </ModalTemplete>
 
-      {/*       <ModalTemplete
+      <ModalTemplete
         isOpen={userListModal.isOpen}
         onClose={userListModal.onClose}
         title={"ユーザーリスト"}
       >
         <UserList userList={users} />
-      </ModalTemplete> */}
+      </ModalTemplete>
 
-      {/*       <ModalTemplete
+      <ModalTemplete
         isOpen={spectator.isOpen}
         onClose={spectator.onClose}
         title={"ゲームリスト"}
       >
         <SpectatorModal />
-      </ModalTemplete> */}
+      </ModalTemplete>
 
       {/*       {isAdmin && (
         <ModalTemplete

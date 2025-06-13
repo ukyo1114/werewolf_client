@@ -4,9 +4,11 @@ import axios from "axios";
 import {
   Stack,
   Button,
-  FormControl, FormLabel,
+  FormControl,
+  FormLabel,
   Checkbox,
-  Input, InputGroup,
+  Input,
+  InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -15,13 +17,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 
 import { useUserState } from "../../context/UserProvider.jsx";
-import useNotification from "../../hooks/useNotification";
+import useNotification from "../../commonHooks/useNotification";
 import { errors, messages } from "../../messages";
 import {
-  userSettingsValidationSchema, userSettingsInitialValues,
+  userSettingsValidationSchema,
+  userSettingsInitialValues,
 } from "./validationSchema";
-import { EllipsisText } from "../miscellaneous/CustomComponents.jsx";
-import ModalButton from "../miscellaneous/ModalButton.jsx";
+import { EllipsisText, CustomButton } from "../CustomComponents";
 
 const UserSettingsModal = () => {
   const { user } = useUserState();
@@ -30,37 +32,40 @@ const UserSettingsModal = () => {
   const [confirmNewPassShow, setConfirmNewPassShow] = useState(false);
   const [currentPassShow, setCurrentPassShow] = useState(false);
 
-  const handleSubmit = useCallback(async (values, actions) => {
-    const {
-      email,
-      newPassword,
-      currentPassword,
-      isEmailChanged,
-      isPasswordChanged,
-    } = values;
-    actions.setSubmitting(true);
+  const handleSubmit = useCallback(
+    async (values, actions) => {
+      const {
+        email,
+        newPassword,
+        currentPassword,
+        isEmailChanged,
+        isPasswordChanged,
+      } = values;
+      actions.setSubmitting(true);
 
-    const payload = {
-      currentPassword: currentPassword,
-    };
-    if (isEmailChanged && email) payload.email = email;
-    if (isPasswordChanged && newPassword) payload.newPassword = newPassword;
+      const payload = {
+        currentPassword: currentPassword,
+      };
+      if (isEmailChanged && email) payload.email = email;
+      if (isPasswordChanged && newPassword) payload.newPassword = newPassword;
 
-    try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      try {
+        const config = { headers: { Authorization: `Bearer ${user.token}` } };
 
-      await axios.put(
-        "/api/user/settings",
-        payload,
-        config,
-      );
+        await axios.put("/api/user/settings", payload, config);
 
-      if (payload.email) showToast(messages.USER_SETTINGS.email);
-      if (payload.newPassword) showToast(messages.USER_SETTINGS.password, "success");
-    } catch (error) {
-      showToast(error?.response?.data?.error || errors.USER_SETTINGS_FAILED, "error");
-    }
-  }, [user.token, showToast]);
+        if (payload.email) showToast(messages.USER_SETTINGS.email);
+        if (payload.newPassword)
+          showToast(messages.USER_SETTINGS.password, "success");
+      } catch (error) {
+        showToast(
+          error?.response?.data?.error || errors.USER_SETTINGS_FAILED,
+          "error"
+        );
+      }
+    },
+    [user.token, showToast]
+  );
 
   return (
     <Stack w="100%" overflow="hidden">
@@ -70,18 +75,17 @@ const UserSettingsModal = () => {
         onSubmit={handleSubmit}
       >
         {(formik) => (
-            <Form
-              style={{
-                display: "flex", flexDirection: "column", overflow: "auto"
-              }}
-            >
+          <Form
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              overflow: "auto",
+            }}
+          >
             <FormControl id="isEmailChanged" mb={2}>
               <Field name="isEmailChanged">
                 {({ field }) => (
-                  <Checkbox
-                    {...field}
-                    isChecked={field.value}
-                  >
+                  <Checkbox {...field} isChecked={field.value}>
                     <EllipsisText>メールアドレスを変更する</EllipsisText>
                   </Checkbox>
                 )}
@@ -110,10 +114,7 @@ const UserSettingsModal = () => {
             <FormControl id="isPasswordChanged" mb={2}>
               <Field name="isPasswordChanged">
                 {({ field }) => (
-                  <Checkbox
-                    {...field}
-                    isChecked={field.value}
-                  >
+                  <Checkbox {...field} isChecked={field.value}>
                     <EllipsisText>パスワードを変更する</EllipsisText>
                   </Checkbox>
                 )}
@@ -140,7 +141,9 @@ const UserSettingsModal = () => {
                     size="sm"
                     onClick={() => setNewPassShow(!newPassShow)}
                     variant="ghost"
-                    aria-label={newPassShow ? "パスワードを隠す" : "パスワードを表示"}
+                    aria-label={
+                      newPassShow ? "パスワードを隠す" : "パスワードを表示"
+                    }
                     color="gray.700"
                   >
                     <FontAwesomeIcon icon={newPassShow ? faEyeSlash : faEye} />
@@ -174,10 +177,16 @@ const UserSettingsModal = () => {
                     size="sm"
                     onClick={() => setConfirmNewPassShow(!confirmNewPassShow)}
                     variant="ghost"
-                    aria-label={confirmNewPassShow ? "パスワードを隠す" : "パスワードを表示"}
+                    aria-label={
+                      confirmNewPassShow
+                        ? "パスワードを隠す"
+                        : "パスワードを表示"
+                    }
                     color="gray.700"
                   >
-                    <FontAwesomeIcon icon={confirmNewPassShow ? faEyeSlash : faEye} />
+                    <FontAwesomeIcon
+                      icon={confirmNewPassShow ? faEyeSlash : faEye}
+                    />
                   </Button>
                 </InputRightElement>
               </InputGroup>
@@ -189,7 +198,9 @@ const UserSettingsModal = () => {
             </FormControl>
 
             <FormControl id="currentPassword" mb={3}>
-              <FormLabel><EllipsisText>現在のパスワード</EllipsisText></FormLabel>
+              <FormLabel>
+                <EllipsisText>現在のパスワード</EllipsisText>
+              </FormLabel>
               <InputGroup>
                 <Field name="currentPassword">
                   {({ field }) => (
@@ -198,7 +209,8 @@ const UserSettingsModal = () => {
                       type={currentPassShow ? "text" : "password"}
                       placeholder="現在のパスワード"
                       isDisabled={
-                        !formik.values.isEmailChanged && !formik.values.isPasswordChanged
+                        !formik.values.isEmailChanged &&
+                        !formik.values.isPasswordChanged
                       }
                       autoComplete="off"
                       pr="4rem"
@@ -211,10 +223,14 @@ const UserSettingsModal = () => {
                     size="sm"
                     onClick={() => setCurrentPassShow(!currentPassShow)}
                     variant="ghost"
-                    aria-label={currentPassShow ? "パスワードを隠す" : "パスワードを表示"}
+                    aria-label={
+                      currentPassShow ? "パスワードを隠す" : "パスワードを表示"
+                    }
                     color="gray.700"
                   >
-                    <FontAwesomeIcon icon={currentPassShow ? faEyeSlash : faEye} />
+                    <FontAwesomeIcon
+                      icon={currentPassShow ? faEyeSlash : faEye}
+                    />
                   </Button>
                 </InputRightElement>
               </InputGroup>
@@ -224,10 +240,10 @@ const UserSettingsModal = () => {
                 style={{ color: "red", fontSize: "smaller" }}
               />
             </FormControl>
-            
-            <ModalButton type="submit" isLoading={formik.isSubmitting}>
+
+            <CustomButton type="submit" isLoading={formik.isSubmitting}>
               送信
-            </ModalButton>
+            </CustomButton>
           </Form>
         )}
       </Formik>

@@ -3,10 +3,10 @@ import axios from "axios";
 
 import { Stack } from "@chakra-ui/react";
 
-import { useUserState } from "../../context/UserProvider.jsx";
-import useNotification from "../../hooks/useNotification";
-import DisplayUser from "../miscellaneous/DisplayUser.jsx";
-import ModalButton from "../miscellaneous/ModalButton.jsx";
+import { useUserState } from "../../../../context/UserProvider.jsx";
+import useNotification from "../../../../commonHooks/useNotification";
+import DisplayUser from "../../../../components/DisplayUser.jsx";
+import ModalButton from "../../../../components/ModalButton.jsx";
 
 const VoteModal = ({ mode, onClose }) => {
   const { user, currentChannel } = useUserState();

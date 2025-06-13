@@ -12,14 +12,15 @@ import {
 } from "@chakra-ui/react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
+import ImageCropper from "../ImageCropper";
+import { EllipsisText, CustomButton } from "../CustomComponents";
+
 import { useUserState } from "../../context/UserProvider.jsx";
-import useNotification from "../../hooks/useNotification";
+import useNotification from "../../commonHooks/useNotification";
+import usePostDetails from "../../commonHooks/usePostDetails";
+
 import { errors, messages } from "../../messages";
 import { profileSettingsValidationSchema } from "./validationSchema";
-import ImageCropper from "../miscellaneous/ImageCropper";
-import usePostDetails from "../../hooks/usePostDetails";
-import { EllipsisText } from "../miscellaneous/CustomComponents.jsx";
-import ModalButton from "../miscellaneous/ModalButton.jsx";
 
 const ProfileSettingsModal = ({ onClose }) => {
   const { user, uDispatch } = useUserState();
@@ -190,9 +191,9 @@ const ProfileSettingsModal = ({ onClose }) => {
                 />
               </FormControl>
 
-              <ModalButton type="submit" isLoading={formik.isSubmitting}>
+              <CustomButton type="submit" isLoading={formik.isSubmitting}>
                 送信
-              </ModalButton>
+              </CustomButton>
             </Form>
           )}
         </Formik>

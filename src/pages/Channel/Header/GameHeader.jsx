@@ -2,7 +2,7 @@ import { useCallback, useMemo, useEffect, useRef } from "react";
 import axios from "axios";
 import io from "socket.io-client";
 import Countdown from "react-countdown";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { useUserState } from "../../../context/UserProvider.jsx";
 import useNotification from "../../../hooks/useNotification";
 import { useJoinChannel } from "../../../hooks/useJoinChannel";
@@ -11,7 +11,8 @@ import { PHASE_MAP, ROLE_MAP, PHASE_DURATIONS } from "../../../constants";
 import {
   DisplayRole,
   DisplayPhase,
-} from "../../../components/miscellaneous/CustomComponents";
+} from "../../../components/CustomComponents";
+import HeaderTemp from "./HeaderTemp.jsx";
 
 const GameHeader = () => {
   const { user, uDispatch, currentChannel, chDispatch } = useUserState();
@@ -104,8 +105,12 @@ const GameHeader = () => {
   ]);
 
   return (
-    <>
-      <Flex alignItems="center">
+    <HeaderTemp>
+      <Flex
+        alignItems="center"
+        backdropFilter="blur(1px)"
+        bg="rgba(255,255,255,0.3)"
+      >
         <DisplayPhase mr={2}>{currentDay}日目</DisplayPhase>
         <DisplayPhase>{PHASE_MAP[currentPhase || "pre"]}</DisplayPhase>
       </Flex>
@@ -114,13 +119,22 @@ const GameHeader = () => {
         <Countdown
           key={timerEnd}
           date={timerEnd}
-          renderer={({ minutes, seconds }) => minutes * 60 + seconds}
+          renderer={({ minutes, seconds }) => (
+            <Text
+              fontSize="xl"
+              fontWeight="bold"
+              fontFamily="'Comic Sans MS', cursive"
+              letterSpacing="0.2em"
+            >
+              {minutes * 60 + seconds}
+            </Text>
+          )}
         />
       )}
       <DisplayRole status={user.status}>
         {ROLE_MAP[user.role || "spectator"]}
       </DisplayRole>
-    </>
+    </HeaderTemp>
   );
 };
 

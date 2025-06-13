@@ -14,12 +14,12 @@ import {
 
 import { FaEllipsisH } from "react-icons/fa";
 
+import ModalTemplete from "../ModalTemplete";
+import { EllipsisText } from "../CustomComponents";
 import ProfileModal from "./ProfileModal";
 import ProfileSettingsModal from "./ProfileSettingsModal";
 import UserSettingsModal from "./UserSettingsModal";
-import ModalTemplete from "../miscellaneous/ModalTemplete";
-import { EllipsisText } from "../miscellaneous/CustomComponents.jsx";
-import { useUserState } from "../../context/UserProvider.jsx";
+import { useUserState } from "../../context/UserProvider";
 
 const ProfileMenu = () => {
   const pModal = useDisclosure();

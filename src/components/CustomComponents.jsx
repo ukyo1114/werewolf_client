@@ -1,4 +1,4 @@
-import { Flex, Text, Divider, Button, Tooltip } from "@chakra-ui/react";
+import { Flex, Text, Divider, Button } from "@chakra-ui/react";
 import { useUserState } from "../context/UserProvider";
 
 export const DisplayDay = ({ day }) => (
@@ -54,11 +54,13 @@ export const SidebarButton = ({ label, children, ...props }) => {
       borderWidth={isMobile ? "1px" : { lg: "1px" }}
       boxShadow={isMobile ? "md" : { lg: "md" }}
       bg={isMobile ? "rgba(255,255,255,0.3)" : { lg: "rgba(255,255,255,0.3)" }}
-      backdropFilter={isMobile ? "blur(8px)" : { lg: "blur(8px)" }}
+      backdropFilter={isMobile ? "blur(1px)" : { lg: "blur(1px)" }}
       _hover={{
         transform: "translateY(-2px)",
         boxShadow: "lg",
       }}
+      w="100%"
+      justifyContent="flex-start"
       {...props}
     >
       {children}
@@ -120,4 +122,9 @@ export const formProps = {
   borderColor: "gray.500",
   borderWidth: "2px",
   bg: "whiteAlpha.900",
+};
+
+export const shadowProps = {
+  boxShadow:
+    "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), inset 0 0 20px rgba(0, 0, 0, 0.3)",
 };

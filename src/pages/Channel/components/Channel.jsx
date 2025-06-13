@@ -6,6 +6,7 @@ import { Flex, Stack } from "@chakra-ui/react";
 import { useUserState } from "../../../context/UserProvider.jsx";
 import Chat from "./Chat.jsx";
 import ChannelHeader from "../Header/ChannelHeader.jsx";
+import GameHeader from "../Header/GameHeader.jsx";
 // import { ChannelHeader } from "../../components/channels/ChannelHeader.jsx";
 // import ChannelListSidebar from "../../components/channelList/ChannelListSidebar.jsx";
 
@@ -17,7 +18,6 @@ import ChannelHeader from "../Header/ChannelHeader.jsx";
 ); */
 
 const Channel = () => {
-  const [mode, setMode] = useState(null);
   const { user, uDispatch, currentChannel, isMobile } = useUserState();
   const { _id: channelId, isGame, phase } = currentChannel;
 
@@ -40,24 +40,24 @@ const Channel = () => {
     }
   }, [channelId, navigate]);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     const currentMode = isGame ? "game" : "channel";
     setMode(currentMode);
-  }, [isGame, setMode]);
+  }, [isGame, setMode]); */
 
   // 背景画像の決定ロジック
   let bgImage, bgSize, bgPosition, bgRepeat;
-  if (mode === "channel") {
+  if (!isGame) {
     bgImage = "url('/The-citys-main-street2.jpg')";
     bgSize = "cover";
     bgPosition = "center";
     bgRepeat = "no-repeat";
-  } else if (mode === "game" && phase?.currentPhase === "night") {
+  } else if (phase?.currentPhase === "night") {
     bgImage = "url('/night-sky3.jpg')";
     bgSize = "cover";
     bgPosition = "center";
     bgRepeat = "no-repeat";
-  } else if (mode === "game") {
+  } else {
     bgImage = "url('/cafe2.jpg')";
     bgSize = "cover";
     bgPosition = "center";
@@ -85,7 +85,7 @@ const Channel = () => {
         m={isMobile ? 2 : 4}
         gap={4}
       >
-        <ChannelHeader />
+        {isGame ? <GameHeader /> : <ChannelHeader />}
         {channelId && <Chat key={channelId} />}
       </Stack>
     </Flex>

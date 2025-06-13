@@ -1,6 +1,6 @@
 import { Box, Flex, Text, Avatar } from "@chakra-ui/react";
-import { EllipsisText } from "../miscellaneous/CustomComponents";
-import { useUserState } from "../../context/UserProvider";
+import { EllipsisText } from "../../../components/CustomComponents";
+import { useUserState } from "../../../context/UserProvider";
 
 const DisplayMessage = ({ message, user }) => {
   const { isMobile } = useUserState();

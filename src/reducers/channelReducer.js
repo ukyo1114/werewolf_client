@@ -10,6 +10,7 @@ const initialChannelState = {
   users: [],
   channelAdmin: "",
   blockUsers: [],
+  numberOfPlayers: 0,
   channel: {
     _id: "",
     channelName: "",

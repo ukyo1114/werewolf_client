@@ -15,7 +15,13 @@ export const useJoinChannel = () => {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
 
         const {
-          data: { channelName, channelDescription, channelAdmin, channelUsers },
+          data: {
+            channelName,
+            channelDescription,
+            channelAdmin,
+            channelUsers,
+            numberOfPlayers,
+          },
         } = await axios.put(
           `/api/channel/join/${channelId}`,
           { password: password || null },
@@ -28,6 +34,7 @@ export const useJoinChannel = () => {
           channelDescription,
           channelAdmin,
           users: channelUsers,
+          numberOfPlayers,
         };
 
         chDispatch({ type: "JOIN_CHANNEL", payload: channel });

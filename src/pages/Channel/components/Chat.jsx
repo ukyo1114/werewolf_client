@@ -18,10 +18,11 @@ import { useUserState } from "../../../context/UserProvider.jsx";
 import useChatMessages from "../../../hooks/useChatMessages";
 import useChatSocket from "../../../hooks/useChatSocket";
 import { channelValidationSchema } from "../../../components/channel/validationSchema";
-import DisplayMessage from "../../../components/channel/DisplayMessage.jsx";
+import DisplayMessage from "./DisplayMessage.jsx";
 import { GAME_MASTER } from "../../../constants";
 import messagesReducer from "../../../reducers/messageReducer";
 import ChannelSidebar from "./channelSidebar/ChannelSidebar.jsx";
+import GameSidebar from "./GameSidebar/GameSidebar.jsx";
 
 const Chat = () => {
   const [messages, mDispatch] = useReducer(messagesReducer, []);
@@ -30,7 +31,7 @@ const Chat = () => {
   const isScrollRef = useRef(null);
   const messagesCompletedRef = useRef(null);
 
-  const { users, blockUsers } = currentChannel;
+  const { users, blockUsers, isGame } = currentChannel;
 
   const { loading, fetchMessages, sendMessage } = useChatMessages({
     messages,
@@ -48,7 +49,6 @@ const Chat = () => {
   };
 
   const handleScroll = useCallback(async () => {
-    // 外部化
     if (scrollRef.current && isSocketConnected) {
       const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
       if (scrollTop >= 0) {
@@ -88,10 +88,15 @@ const Chat = () => {
   }, [messages]);
 
   return (
-    <Flex w="100%" h="100%" gap={4}>
+    <Flex w="100%" h="100%" gap={4} overflow="hidden">
       {!isMobile && (
-        <Box display={{ base: "none", md: "block" }} flexShrink={0}>
-          <ChannelSidebar />
+        <Box
+          display={{ base: "none", md: "block" }}
+          flexShrink={0}
+          h="100%"
+          overflow="auto"
+        >
+          {isGame ? <GameSidebar /> : <ChannelSidebar />}
         </Box>
       )}
       <Stack
@@ -99,7 +104,7 @@ const Chat = () => {
         w="100%"
         h="100%"
         flex={1}
-        overflow="auto"
+        overflow="hidden"
         bg="rgba(255,255,255,0.5)"
         backdropFilter="blur(10px)"
         borderRadius="lg"
@@ -115,6 +120,8 @@ const Chat = () => {
             px={2}
             gap={3}
             w="100%"
+            flex={1}
+            minH={0}
           >
             {messages &&
               messages.map((m) => {

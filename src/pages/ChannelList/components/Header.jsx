@@ -13,6 +13,7 @@ import {
 import {
   EllipsisText,
   CustomButton,
+  shadowProps,
 } from "../../../components/CustomComponents";
 import ModalTemplete from "../../../components/ModalTemplete";
 import CreateChannel from "./CreateChannel";
@@ -20,6 +21,7 @@ import { useState } from "react";
 import { useUserState } from "../../../context/UserProvider";
 import { FaBars } from "react-icons/fa";
 import { FaRegPlusSquare } from "react-icons/fa";
+import ProfileMenu from "../../../components/profile/ProfileMenu";
 
 const Header = ({ showJoinedCh, setShowJoinedCh }) => {
   const { isMobile } = useUserState();
@@ -32,10 +34,10 @@ const Header = ({ showJoinedCh, setShowJoinedCh }) => {
       bgSize="cover"
       bgPosition="center"
       borderRadius="md"
-      border="4px solid #ccc"
+      border="4px solid #b0b0b0"
       p={4}
       my={4}
-      boxShadow="lg"
+      {...shadowProps}
       w="100%"
     >
       <Flex justify="space-between" align="center">
@@ -48,6 +50,7 @@ const Header = ({ showJoinedCh, setShowJoinedCh }) => {
         >
           チャンネル一覧
         </Text>
+
         <Flex gap={4} align="center">
           <Checkbox
             id="isJoined"
@@ -58,6 +61,7 @@ const Header = ({ showJoinedCh, setShowJoinedCh }) => {
           >
             <EllipsisText>参加中のみ</EllipsisText>
           </Checkbox>
+
           {isMobile ? (
             <Menu>
               <MenuButton
@@ -80,6 +84,8 @@ const Header = ({ showJoinedCh, setShowJoinedCh }) => {
               チャンネル作成
             </CustomButton>
           )}
+
+          <ProfileMenu />
         </Flex>
       </Flex>
       <ModalTemplete title="チャンネル作成" isOpen={isOpen} onClose={onClose}>
